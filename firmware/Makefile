@@ -30,7 +30,7 @@ CFLAGS   += -ffreestanding  -nostartfiles -nostdlib -nodefaultlibs
 LDFLAGS  += -lc -lnosys -lstdc++
 LDFLAGS  += -Wl,--gc-sections -Wl,-T,$(LDFILE)
 
-TARGET_NAME = riscv-console-firmware
+TARGET_NAME = firmware
 
 TARGET_OBJS =   $(OBJ_DIR)/main.o               \
                 $(OBJ_DIR)/crt0.o               \
