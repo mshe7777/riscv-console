@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "kernel.h"
 
 volatile int global = 42;
 volatile uint32_t controller_status = 0;
@@ -29,38 +30,39 @@ int main() {
     while (1) {
         int c = a + b + global;
         if(global != last_global){
-            if(controller_status){
-                VIDEO_MEMORY[x_pos] = ' ';
-                if(controller_status & 0x1){
-                    if(x_pos & 0x3F){
-                        x_pos--;
-                    }
-                }
-                if(controller_status & 0x2){
-                    if(x_pos >= 0x40){
-                        x_pos -= 0x40;
-                    }
-                }
-                if(controller_status & 0x4){
-                    if(x_pos < 0x8C0){
-                        x_pos += 0x40;
-                    }
-                }
-                if(controller_status & 0x8){
-                    if((x_pos & 0x3F) != 0x3F){
-                        x_pos++;
-                    }
-                }
-                VIDEO_MEMORY[x_pos] = 'X';
-            }
-            last_global = global;
-        }
-        countdown--;
-        if(!countdown){
-            global++;
-            controller_status = (*((volatile uint32_t *)0x40000018));
-            countdown = 100000;
-        }
+        //     if(controller_status){
+        //         VIDEO_MEMORY[x_pos] = ' ';
+        //         if(controller_status & 0x1){
+        //             if(x_pos & 0x3F){
+        //                 x_pos--;
+        //             }
+        //         }
+        //         if(controller_status & 0x2){
+        //             if(x_pos >= 0x40){
+        //                 x_pos -= 0x40;
+        //             }
+        //         }
+        //         if(controller_status & 0x4){
+        //             if(x_pos < 0x8C0){
+        //                 x_pos += 0x40;
+        //             }
+        //         }
+        //         if(controller_status & 0x8){
+        //             if((x_pos & 0x3F) != 0x3F){
+        //                 x_pos++;
+        //             }
+        //         }
+        //         VIDEO_MEMORY[x_pos] = 'X';
+        //     }
+        //     last_global = global;
+        // }
+        // countdown--;
+        // if(!countdown){
+        //     global++;
+        //     controller_status = (*((volatile uint32_t *)0x40000018));
+        //     countdown = 100000;
+        // }
+    }
     }
     return 0;
 }

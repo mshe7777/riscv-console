@@ -13,6 +13,6 @@
 uint32_t getTicks();
 uint32_t getButtonStatus();
 uint32_t getCmdInterrupted();
-uint32_t getVideoInterrupte();
+uint32_t getVideoInterrupted();
 
 

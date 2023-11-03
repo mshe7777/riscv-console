@@ -38,7 +38,8 @@ TARGET_OBJS =   $(OBJ_DIR)/main.o               \
                 $(OBJ_DIR)/startup.o  			\
 				$(OBJ_DIR)/timer.o 				\
 				$(OBJ_DIR)/syscall.o			\
-				$(OBJ_DIR)/kernel.o				
+				$(OBJ_DIR)/kernel.o				\
+				$(OBJ_DIR)/video.o
 				
 
 all: directories $(BIN_DIR)/$(TARGET_NAME)

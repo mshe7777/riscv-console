@@ -9,6 +9,7 @@ OBJCOPY=$(TOOLPREFIX)objcopy
 OBJDUMP=$(TOOLPREFIX)objdump
 STRIP=$(TOOLPREFIX)strip
 
+KERNEL_INC_DIR=../riscv-firmware/src/include
 INC_DIR = ./include
 SRC_DIR = ./src
 OBJ_DIR = ./obj
