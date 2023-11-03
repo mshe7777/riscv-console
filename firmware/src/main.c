@@ -81,7 +81,7 @@ int main() {
     // MEDIUM_PALETTE[1] = 0xFFFF0000; // A R G B
     MEDIUM_CONTROL[0] = MediumControl(0, 0, 0, 0, 0);
     // setSpriteControl(0,0,0,0,0,Medium);
-    *MODE_REGISTER = 1;
+    // *MODE_REGISTER = 1;
     while (1) {
         int c = a + b + global;
         if(global != last_global){
