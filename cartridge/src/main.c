@@ -2,6 +2,8 @@
 
 volatile int global = 42;
 volatile uint32_t controller_status = 0;
+volatile uint32_t *MODE_REGISTER = (volatile uint32_t *)(0x500F6780);
+
 
 volatile char *VIDEO_MEMORY = (volatile char *)(0x50000000 + 0xF4800);
 int main() {
@@ -10,6 +12,7 @@ int main() {
     int last_global = 42;
     int x_pos = 12;
     int countdown =1;
+    *MODE_REGISTER=0;
 
     VIDEO_MEMORY[0] = 'H';
     VIDEO_MEMORY[1] = 'e';

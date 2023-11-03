@@ -17,11 +17,6 @@ volatile int vip=0;
 volatile int cmd=0;
 
 
-void changeVideoModel(){
-    cmd=getCmdInterrupted();
-    setVideoModel(1);
-}
-
 volatile int global = 42;
 volatile uint32_t controller_status = 0;
 volatile uint32_t *CARTRIDGE=(volatile uint32_t *)(0x4000001C);
@@ -37,6 +32,13 @@ uint32_t* PALETTE1;
 typedef void (*FunctionPtr)(void);
 
 uint32_t MediumControl(uint8_t palette, int16_t x, int16_t y, uint8_t z, uint8_t index);
+
+void changeVideoModel(){
+    cmd=getCmdInterrupted();
+    setVideoModel(cmd);
+    // test
+    *MODE_REGISTER=~(*MODE_REGISTER);
+}
 
 int main() {
     int a = 4;
@@ -88,9 +90,11 @@ int main() {
             getVideoInterrupted();
 
             if((*CARTRIDGE)&0x1){
+                *MODE_REGISTER = 0;
                 FunctionPtr Fun = (FunctionPtr)((*CARTRIDGE) & 0xFFFFFFFC);
                 Fun(); 
             }
+            changeVideoModel();
             controller_status=getButtonStatus();
             if(controller_status){
                 VIDEO_MEMORY[x_pos] = ' ';
