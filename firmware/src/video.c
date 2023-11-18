@@ -1,16 +1,26 @@
 #include "include/video.h"
 
 volatile uint32_t *MODE_CONTROL_REG=(volatile uint32_t *)(0x50000000+0xF6780);
+
+
 void setVideoModel(int cmd){
     (*MODE_CONTROL_REG)^=(cmd&0x1);
 }
+int writeMemory(uint32_t mem_handle,uint32_t addr,uint32_t size){
+    uint32_t* transfer_addr=(uint32_t*)mem_handle;
 
+    for(uint32_t i=0;i<size;i++){
+        ((uint8_t*)transfer_addr)[i]=((uint8_t*)addr)[i];
+    }
+    return 0;
+}
 
 
 int setBackGround(uint32_t idx,uint8_t* addr){
     uint32_t offset=BACKGROUND_DATA_BASE+idx*BACKGROUND_DATA_SIZE;
 
-    for(uint32_t i=0;i<BACKGROUND_DATA_SIZE;i++) ((uint8_t*)offset)[i]=addr[i];
+    writeMemory(offset,(uint32_t)addr,BACKGROUND_DATA_SIZE);
+    // for(uint32_t i=0;i<BACKGROUND_DATA_SIZE;i++) ((uint8_t*)offset)[i]=addr[i];
     return 0;
 }
 
@@ -34,12 +44,7 @@ int setSprite(uint32_t idx, uint8_t *addr, Sprite sprites) {
             break;
     }
 
-    uint8_t *source_addr = addr;
-
-    for (uint32_t i = 0; i < size; i++) {
-        ((uint8_t *)offset)[i] = source_addr[i];
-    }
-
+    writeMemory(offset,(uint32_t)addr,size);
     return 0;
 }
 
@@ -47,11 +52,11 @@ int setSprite(uint32_t idx, uint8_t *addr, Sprite sprites) {
 
 int initBackGroundPalettes(uint32_t idx,uint8_t* addr){
     uint32_t offset=BACKGROUND_PALETTE_BASE+idx*BACKGROUND_PALETTE_SIZE;
-    for(uint32_t i=0;i<BACKGROUND_PALETTE_SIZE;i++) ((uint8_t*)offset)[i]=addr[i];
+    writeMemory(offset,(uint32_t)addr,BACKGROUND_PALETTE_SIZE);
     return 0;
 }
 
-int initSpritesPalettes(uint32_t idx,uint32_t addr,Sprite sprites){
+int initSpritesPalettes(uint32_t idx,uint8_t *addr,Sprite sprites){
     uint32_t* offset;
     uint32_t size=0x4;
     switch (sprites)
@@ -69,7 +74,7 @@ int initSpritesPalettes(uint32_t idx,uint32_t addr,Sprite sprites){
     default:
         break;
     }
-    *offset=addr;
+    writeMemory(offset,(uint32_t)addr,SMALL_SPRITE_PALETTE_SIZE);
 }
 
 

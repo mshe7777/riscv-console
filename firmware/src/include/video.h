@@ -25,19 +25,19 @@
 
 // Background and Sprite Palettes
 #define BACKGROUND_PALETTE_BASE 0x500F0000
-#define BACKGROUND_PALETTE_SIZE 0x1000 // 4KiB
+#define BACKGROUND_PALETTE_SIZE 0x400 // 4KiB
 
 // Large Sprite Palettes
 #define LARGE_SPRITE_PALETTE_BASE 0x500F1000
-#define LARGE_SPRITE_PALETTE_SIZE 0x1000 // 4KiB
+#define LARGE_SPRITE_PALETTE_SIZE 0x400 // 4KiB
 
 // Medium Sprite Palettes
 #define MEDIUM_SPRITE_PALETTE_BASE 0x500F2000
-#define MEDIUM_SPRITE_PALETTE_SIZE 0x1000 // 4KiB
+#define MEDIUM_SPRITE_PALETTE_SIZE 0x400 // 4KiB
 
 // Small Sprite Palettes
 #define SMALL_SPRITE_PALETTE_BASE 0x500F3000
-#define SMALL_SPRITE_PALETTE_SIZE 0x1000 // 4KiB
+#define SMALL_SPRITE_PALETTE_SIZE 0x400 // 4KiB
 
 // Font Data
 #define FONT_DATA_BASE 0x500F4000
@@ -93,14 +93,12 @@ int setSprite(uint32_t idx,uint8_t* addr,Sprite sprites);
 
 
 int initBackGroundPalettes(uint32_t idx,uint8_t* addr);
-int initSpritesPalettes(uint32_t idx,uint32_t addr,Sprite sprites);
+int initSpritesPalettes(uint32_t idx, uint8_t *addr,Sprite sprites);
 
+
+
+
+int writeMemory(uint32_t mem_handle,uint32_t addr,uint32_t size);
 
 void setBackGroundControl(uint32_t idx,uint32_t x,uint32_t y,uint32_t z,uint32_t palette);
 void setSpriteControl(uint32_t idx,uint32_t x,uint32_t y,uint32_t z,uint32_t palette,Sprite sprites);
-
-
-
-
-
-
