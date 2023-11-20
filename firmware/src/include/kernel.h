@@ -2,6 +2,9 @@
 #include<stdint.h>
 
 
+
+
+// timer
 #define INTER_PENDING   (*((volatile uint32_t *)0x40000004))
 #define MTIME_LOW       (*((volatile uint32_t *)0x40000008))
 #define MTIME_HIGH      (*((volatile uint32_t *)0x4000000C))
@@ -12,24 +15,24 @@
 
 
 
+// hardware
 #define MACHINE_TIMER 0x80000007
 #define EXTERNAL 0x8000000b
-typedef uint32_t TInterruptState, *TInterruptStateRef;
-typedef uint32_t *TStackRef;
-typedef uint32_t (*TContextEntry)(void *param);
-typedef uint32_t ThreadPriority;
-typedef uint32_t ThreadID; 
-typedef uint32_t TStatus;// total status
-typedef uint32_t ThreadReturn;
-typedef uint32_t ThreadStatus;
-typedef uint32_t Tick;
 
+// def
+typedef uint32_t TStatus;// total status
+
+// systemcall 
 uint32_t getTicks();
 uint32_t getButtonStatus();
 uint32_t getCmdInterrupted();
 uint32_t getVideoInterrupted();
 
 
+// status
+#define INVALD_THREAD_ID ((ThreadID)-1);
+
+// assembly 
 __attribute__((always_inline)) inline uint32_t csr_mstatus_read(void)
 {
     uint32_t result;

@@ -35,11 +35,7 @@ TARGET_NAME = riscv-console-example
 TARGET_OBJS =   $(OBJ_DIR)/main.o               \
                 $(OBJ_DIR)/crt0.o               \
                 $(OBJ_DIR)/interrupt.o          \
-<<<<<<< HEAD
                 $(OBJ_DIR)/startup.o
-=======
-                $(OBJ_DIR)/startup.o			\
->>>>>>> b0044aecb2053ff8d5c73f868ce8aa905487e026
 
 all: directories $(BIN_DIR)/$(TARGET_NAME)
 

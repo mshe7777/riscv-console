@@ -4,7 +4,52 @@
 #include "kernel.h"
 // also include the defination of schedule
 
+// thread def
+typedef uint32_t TInterruptState, *TInterruptStateRef;
+typedef uint32_t *TStackRef;
+typedef uint32_t (*TContextEntry)(void *param);
+typedef uint32_t ThreadID; 
 
+typedef uint32_t ThreadReturn;
+typedef uint32_t Tick;
+
+typedef enum{
+    Created,
+    Ready,
+    Running,
+    Waiting,
+    Dead
+}ThreadStatus;
+
+typedef enum{
+    High=0,
+    Normal,
+    Low
+}ThreadPriority;
+
+
+typedef struct TCB
+{
+    ThreadID tid;
+    uint32_t *gp;
+    ThreadStatus state;
+    ThreadPriority priority;
+    uint32_t* sp;
+    uint32_t memory_size;
+    TContextEntry entry;
+    void* param;
+    int ticks;
+    ThreadID wait_id;
+    ThreadReturn ret_val;
+    uint8_t *stack_base;// return value of malloc;
+    const char* buffer;
+    uint32_t write_size;
+
+}TCB;
+
+
+
+extern volatile ThreadID global_tid;
 
 TStackRef ContextInitialize(TStackRef stacktop, TContextEntry entry, void *param);
 void ContextSwitch(TStackRef *storecurrent, TStackRef restore);
@@ -26,9 +71,20 @@ TStatus threadDelete(ThreadID tid);
 TStatus threadActivate(ThreadID tid);
 TStatus threadTerminate(ThreadID tid,ThreadReturn retval);
 TStatus threadWait(ThreadID tid,ThreadReturn* retvalref,Tick timeout );
-ThreadID threadID();// get current tid
+ThreadID threadId();// get current tid
 ThreadStatus threadState(ThreadID tid); //  get the thread's status
 TStatus threadSleep(Tick tick); // unknow?
+
+
+
+
+
+
+
+
+
+
+
 
 
 
