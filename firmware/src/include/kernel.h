@@ -1,7 +1,5 @@
 #pragma once
 #include<stdint.h>
-#include "include/tcb.h"
-#include "include/dqueue.h"
 
 
 #define INTER_PENDING   (*((volatile uint32_t *)0x40000004))
@@ -15,21 +13,75 @@
 
 
 #define MACHINE_TIMER 0x80000007
-
-typedef uint32_t TStatus, *TStatusRef;
-typedef uint32_t TTick, *TTickRef;
-typedef int32_t  TThreadReturn, *TThreadReturnRef;
-typedef uint32_t TMemorySize, *TMemorySizeRef;
-typedef uint32_t TThreadID, *TThreadIDRef;
-typedef uint32_t TThreadPriority, *TThreadPriorityRef;
-typedef uint32_t TThreadState, *TThreadStateRef;
-typedef char     TTextCharacter, *TTextCharacterRef;
-typedef uint32_t TMemoryPoolID, *TMemoryPoolIDRef;
-typedef uint32_t TMutexID, *TMutexIDRef;
+#define EXTERNAL 0x8000000b
+typedef uint32_t TInterruptState, *TInterruptStateRef;
+typedef uint32_t *TStackRef;
+typedef uint32_t (*TContextEntry)(void *param);
+typedef uint32_t ThreadPriority;
+typedef uint32_t ThreadID; 
+typedef uint32_t TStatus;// total status
+typedef uint32_t ThreadReturn;
+typedef uint32_t ThreadStatus;
+typedef uint32_t Tick;
 
 uint32_t getTicks();
 uint32_t getButtonStatus();
 uint32_t getCmdInterrupted();
 uint32_t getVideoInterrupted();
 
+
+__attribute__((always_inline)) inline uint32_t csr_mstatus_read(void)
+{
+    uint32_t result;
+    asm volatile("csrr %0, mstatus"
+                 : "=r"(result));
+    return result;
+}
+
+__attribute__((always_inline)) inline void csr_mstatus_write(uint32_t val)
+{
+    asm volatile("csrw mstatus, %0"
+                 :
+                 : "r"(val));
+}
+
+__attribute__((always_inline)) inline void csr_write_mie(uint32_t val)
+{
+    asm volatile("csrw mie, %0"
+                 :
+                 : "r"(val));
+}
+
+__attribute__((always_inline)) inline void csr_enable_interrupts(void)
+{
+    asm volatile("csrsi mstatus, 0x8");
+}
+
+__attribute__((always_inline)) inline void csr_disable_interrupts(void)
+{
+    asm volatile("csrci mstatus, 0x8");
+}
+
+__attribute__((always_inline)) inline void csr_write_mepc(uint32_t val)
+{
+    asm volatile("csrw mepc, %0"
+                 :
+                 : "r"(val));
+}
+
+__attribute__((always_inline)) inline uint32_t csr_mepc_read(void)
+{
+    uint32_t result;
+    asm volatile("csrr %0, mepc"
+                 : "=r"(result));
+    return result;
+}
+
+__attribute__((always_inline)) inline uint32_t csr_mcause_read(void)
+{
+    uint32_t result;
+    asm volatile("csrr %0, mcause"
+                 : "=r"(result));
+    return result;
+}
 

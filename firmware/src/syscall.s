@@ -1,5 +1,5 @@
 .section .text, "ax"
-.global getTicks,getButtonStatus,getCmdInterrupted,getVideoInterrupted
+.global getTicks,getButtonStatus,getCmdInterrupted,getVideoInterrupted,threadInit
 
 getTicks:
     li a3,0
@@ -18,4 +18,6 @@ getVideoInterrupted:
     li a3,3
     ecall
 
-  
+threadInit:
+    li a3,4
+    ecall

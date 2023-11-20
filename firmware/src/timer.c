@@ -1,5 +1,6 @@
 #include "include/timer.h"
-
+#include "include/kernel.h"
+#include "include/thread.h"
 
 
 extern volatile char *VIDEO_MEMORY;
@@ -42,11 +43,26 @@ void set_timer(uint64_t timestamp){
 void handle_time_interrupt(){
 
     set_timer(1000);
-    if((++time_count%TICK_NUM)==0){
-        if(video_flag){
-        VIDEO_MEMORY[x]='A';
-        x++;
-        }
+    // if((++time_count%TICK_NUM)==0){
+    //     if(video_flag){
+    //     VIDEO_MEMORY[x]='A';
+    //     x++;
+    //     }
+    // }
+    if (current_thread_num >= 2)
+    {
+        uint32_t mepc = csr_mepc_read();
+        // printf("\n");
+        TInterruptState PrevState = CPUHALSuspendInterrupts();
+        int t1, t2;
+        t1 = running_thread_pointer;
+        t2 = (running_thread_pointer + 1) % current_thread_num;
+        running_thread_pointer = t2;
+        ContextSwitch(&ThreadPointers[t1], ThreadPointers[t2]);
+        csr_write_mepc(mepc);
+        CPUHALResumeInterrupts(PrevState);
     }
+    
+
 }
 

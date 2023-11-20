@@ -14,9 +14,6 @@ SRC_DIR = ./src
 OBJ_DIR = ./obj
 BIN_DIR = ./bin
 
-BASELINE_INC_DIR = ../cartridge/src
-BASELINE_SRC_DIR = ../cartridge/src
-
 DEBUG_MODE=TRUE
 
 ifdef DEBUG_MODE
@@ -28,13 +25,13 @@ CFLAGS   += -O3
 endif
 
 LDFILE   = riscv32-console.ld
-INCLUDE  += -I $(INC_DIR) -I $(BASELINE_INC_DIR)
+INCLUDE  += -I $(INC_DIR)
 # CFLAGS   += -ffreestanding  -nostartfiles -nostdlib -nodefaultlibs
-CFLAGS   += -ffreestanding  -nostartfiles -nostdlib -nodefaultlibs
-LDFLAGS  += -lc -lnosys -lstdc++
+CFLAGS   += -ffreestanding  -nostartfiles 
+# LDFLAGS  += -lc -lnosys -lstdc++
 LDFLAGS  += -Wl,--gc-sections -Wl,-T,$(LDFILE)
 
-TARGET_NAME = firmware
+TARGET_NAME = riscv-console-firmware
 
 TARGET_OBJS =   $(OBJ_DIR)/main.o               \
                 $(OBJ_DIR)/crt0.o               \
@@ -44,8 +41,9 @@ TARGET_OBJS =   $(OBJ_DIR)/main.o               \
 				$(OBJ_DIR)/syscall.o			\
 				$(OBJ_DIR)/kernel.o				\
 				$(OBJ_DIR)/video.o				\
-				$(OBJ_DIR)/utils.o				\
-				$(OBJ_DIR)/printf.o				\
+				$(OBJ_DIR)/memory.o				\
+				$(OBJ_DIR)/thread.o				\
+				$(OBJ_DIR)/mutex.o				\
 				
 
 all: directories $(BIN_DIR)/$(TARGET_NAME)
@@ -59,10 +57,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.s
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) $(DEFINES) $(INCLUDE) -c $< -o $@
-
-$(OBJ_DIR)/printf.o: $(BASELINE_SRC_DIR)/printf.c
-	$(CXX) $(CFLAGS) $(DEFINES) $(INCLUDE) -c $< -o $@
-
+	
 directories: $(OBJ_DIR) $(BIN_DIR)
 
 $(OBJ_DIR):
