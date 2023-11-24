@@ -1,5 +1,6 @@
 #pragma once
 #include <stdint.h>
+#include <stddef.h>
 
 // video controller
 #define DISPLAY_WITDH 512
@@ -7,9 +8,13 @@
 #define LARGE_SPRITES_SIZE 64
 #define MEDIUM_SPRITES_SIZE 32
 #define SMALL_SPRITES_SIZE 16
+
+#define GRAPHICS_MODE 0x1
+#define TEXT_MODE 0x0
+
 // Background Data
 #define BACKGROUND_DATA_BASE 0x50000000
-#define BACKGROUND_DATA_SIZE 0x90000 // 576KiB
+#define BACKGROUND_DATA_SIZE 0x24000 
 
 // Large Sprite Data
 #define LARGE_SPRITE_DATA_BASE 0x50090000
@@ -74,8 +79,12 @@
 // Mode Control Register
 #define MODE_CONTROL_BASE 0x500F6780
 #define MODE_CONTROL_SIZE 0x4 // 4B
+extern volatile uint32_t *MODE_CONTROL_REG;
 
-
+#define RED 0xFFFF0000
+#define BLUE 0xFF0000FF
+#define GREEN 0xFF00FF00
+#define WHITE 0xFFFFFFFF
 
 enum Sprites{
     Large,
@@ -86,19 +95,37 @@ typedef enum Sprites Sprite;
 
 
 
-void setVideoModel(int cmd);
-
-int setBackGround(uint32_t idx,uint8_t* addr);
-int setSprite(uint32_t idx,uint8_t* addr,Sprite sprites);
+// void setVideoModel(int cmd);
 
 
-int initBackGroundPalettes(uint32_t idx,uint8_t* addr);
-int initSpritesPalettes(uint32_t idx, uint8_t *addr,Sprite sprites);
+int setBackGround(uint8_t idx,char* addr);
+int setSprite(uint8_t idx, uint8_t *addr, Sprite sprites) ;
+int initBackGroundPalettes(uint8_t idx,uint8_t* addr);
+int initSpritesPalettes(uint8_t idx,uint32_t *addr,Sprite sprites);
+void setBackGroundControl(uint8_t ctrl_idx, uint8_t data_idx,uint16_t x,uint16_t y,uint8_t z,uint8_t palette);
+void setTileBackGroundControl(uint8_t ctrl_x,uint8_t tile_idx,uint8_t sub_idx,uint16_t x, uint16_t y, uint8_t z,uint8_t palette);
+void setSpriteControl(uint8_t ctrl_idx,uint8_t data_idx,uint16_t x,uint16_t y,uint16_t z,uint8_t palette,Sprite sprites);
+// Function declarations with updated variable names
+void setBackground(uint8_t backgroundIndex, char* pixelData,
+                   uint8_t controlIndex, uint8_t pixelIndex,
+                   uint8_t tileIndex, uint8_t subIndex,
+                   uint16_t posX, uint16_t posY,
+                   uint8_t zIndex, uint8_t paletteIndex,
+                   uint32_t* paletteData);
 
+void setLargeSprite(uint8_t spriteIndex, uint8_t* spriteData,
+                    uint8_t controlIndex, uint8_t spriteDataIndex,
+                    uint16_t posX, uint16_t posY, uint16_t zIndex,
+                    uint8_t paletteIndex, uint32_t* paletteData);
 
+void setMediumSprite(uint8_t spriteIndex, uint8_t* spriteData,
+                     uint8_t controlIndex, uint8_t spriteDataIndex,
+                     uint16_t posX, uint16_t posY, uint16_t zIndex,
+                     uint8_t paletteIndex, uint32_t* paletteData);
 
+void setSmallSprite(uint8_t spriteIndex, uint8_t* spriteData,
+                    uint8_t controlIndex, uint8_t spriteDataIndex,
+                    uint16_t posX, uint16_t posY, uint16_t zIndex,
+                    uint8_t paletteIndex, uint32_t* paletteData);
 
-int writeMemory(uint32_t mem_handle,uint32_t addr,uint32_t size);
-
-void setBackGroundControl(uint32_t idx,uint32_t x,uint32_t y,uint32_t z,uint32_t palette);
-void setSpriteControl(uint32_t idx,uint32_t x,uint32_t y,uint32_t z,uint32_t palette,Sprite sprites);
+void simple_medium_sprite(int16_t x, int16_t y, int16_t z);

@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <stddef.h>
 #include "include/kernel.h"
 #include "include/thread.h"
 #include "include/memory.h"
@@ -159,7 +160,18 @@ uint32_t c_system_call(uint32_t a0,uint32_t a1,uint32_t a2,uint32_t a3, uint32_t
         // first terminate then delete
         threadTerminate((ThreadID)running_thread_id,ret);
         return ret;
+    }else if(call==9){
+        // _memcpy
+        kmemcpy((uint8_t*)(a0),(uint8_t*)(a1),(size_t)(a2));
+        return ret;
+    }else if(call==10){
+        // _malloc
+        kmalloc((size_t)(a0));
+    }else if(call==11){
+        // _free
+        kfree((void*)(a0));
     }
+
 
     return ret;
 }

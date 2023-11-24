@@ -170,10 +170,12 @@ void handle_time_interrupt(){
         // t2 = (running_thread_pointer + 1) % current_thread_num;
         // running_thread_pointer = t2;
         schedule(sched);
+        
         csr_write_mepc(mepc);
         ResumeInterrupts(PrevState);
     }
     
 
 }
+
 

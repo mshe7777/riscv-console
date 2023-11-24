@@ -1,32 +1,36 @@
 #include "include/video.h"
-
-volatile uint32_t *MODE_CONTROL_REG=(volatile uint32_t *)(0x50000000+0xF6780);
-
-
-void setVideoModel(int cmd){
-    (*MODE_CONTROL_REG)|=(cmd&0x1);
-}
-int writeMemory(uint32_t mem_handle,uint32_t addr,uint32_t size){
-    uint32_t* transfer_addr=(uint32_t*)mem_handle;
-
-    for(uint32_t i=0;i<size;i++){
-        ((uint8_t*)transfer_addr)[i]=((uint8_t*)addr)[i];
-    }
-    return 0;
-}
+#include "include/memory.h"
 
 
-int setBackGround(uint32_t idx,uint8_t* addr){
-    uint32_t offset=BACKGROUND_DATA_BASE+idx*BACKGROUND_DATA_SIZE;
+// mem map for background controls 0x100(256B)
+volatile uint32_t *BACKGROUND_CONTROL = (volatile uint32_t *)(0x500F5A00); 
 
-    writeMemory(offset,(uint32_t)addr,BACKGROUND_DATA_SIZE);
+// mem map for large sprite control 0x400 (1KiB)
+volatile uint32_t *LARGE_SPRITE_CONTROL = (volatile uint32_t *)(0x500F5B00); 
+
+// mem map for medium sprite control 0x400 (1KiB)
+volatile uint32_t *MEDIUM_SPRITE_CONTROL = (volatile uint32_t *)(0x500F5F00); 
+
+// mem map for small sprite control 0x400 (1KiB)
+volatile uint32_t *SMALL_SPRITE_CONTROL = (volatile uint32_t *)(0x500F6300); 
+#define MODE_CONTROL_REG     (*((volatile uint32_t *)0x500F6780))
+// void setVideoModel(int cmd){
+//     (*MODE_CONTROL_REG)|=(cmd&0x1);
+// }
+
+
+
+int setBackGround(uint8_t idx,char* addr){
+    char* offset=BACKGROUND_DATA_BASE+idx*BACKGROUND_DATA_SIZE;
+
+    kmemcpy(offset,addr,BACKGROUND_DATA_SIZE);
     // for(uint32_t i=0;i<BACKGROUND_DATA_SIZE;i++) ((uint8_t*)offset)[i]=addr[i];
     return 0;
 }
 
-int setSprite(uint32_t idx, uint8_t *addr, Sprite sprites) {
-    uint32_t offset;
-    uint32_t size = 0;
+int setSprite(uint8_t idx, uint8_t *addr, Sprite sprites) {
+    char* offset;
+    size_t size = 0;
     switch (sprites) {
         case Large:
             size = LARGE_SPRITE_DATA_SIZE;
@@ -34,7 +38,7 @@ int setSprite(uint32_t idx, uint8_t *addr, Sprite sprites) {
             break;
         case Medium:
             size = MEDIUM_SPRITE_DATA_SIZE;
-            offset = MEDIUM_SPRITE_DATA_BASE + idx * size;
+            offset = ((char*)MEDIUM_SPRITE_DATA_BASE) + idx * size;
             break;
         case Small:
             size = SMALL_SPRITE_DATA_SIZE;
@@ -43,77 +47,147 @@ int setSprite(uint32_t idx, uint8_t *addr, Sprite sprites) {
         default:
             break;
     }
-
-    writeMemory(offset,(uint32_t)addr,size);
+    kmemcpy(offset,addr,size);
     return 0;
 }
 
 
 
-int initBackGroundPalettes(uint32_t idx,uint8_t* addr){
-    uint32_t offset=BACKGROUND_PALETTE_BASE+idx*BACKGROUND_PALETTE_SIZE;
-    writeMemory(offset,(uint32_t)addr,BACKGROUND_PALETTE_SIZE);
+int initBackGroundPalettes(uint8_t idx,uint8_t* addr){
+    char* offset=BACKGROUND_PALETTE_BASE+idx*BACKGROUND_PALETTE_SIZE;
+    kmemcpy(offset,addr,LARGE_SPRITE_PALETTE_SIZE);
     return 0;
 }
 
-int initSpritesPalettes(uint32_t idx,uint8_t *addr,Sprite sprites){
-    uint32_t* offset;
-    uint32_t size=0x4;
+int initSpritesPalettes(uint8_t idx,uint32_t *addr,Sprite sprites){
+    char* offset;
     switch (sprites)
     {
     case Large :
         /* code */
-        offset=LARGE_SPRITE_PALETTE_BASE+idx*0x4;
+        offset=LARGE_SPRITE_PALETTE_BASE+idx*LARGE_SPRITE_CONTROL_SIZE;
         break;
     case Medium:
-        offset=MEDIUM_SPRITE_PALETTE_BASE+idx*0x4;
+        offset=((char*)MEDIUM_SPRITE_PALETTE_BASE)+idx*MEDIUM_SPRITE_PALETTE_SIZE;
         break;
     case Small:
-        offset=SMALL_SPRITE_PALETTE_BASE+idx*0x4;
+        offset=SMALL_SPRITE_PALETTE_BASE+idx*SMALL_SPRITE_PALETTE_SIZE;
         break;
     default:
         break;
     }
-    writeMemory(offset,(uint32_t)addr,SMALL_SPRITE_PALETTE_SIZE);
+    kmemcpy(offset,addr,0x400);
+    return 0;
+
 }
 
 
-void setBackGroundControl(uint32_t idx,uint32_t x,uint32_t y,uint32_t z,uint32_t palette){
+void setBackGroundControl(uint8_t ctrl_idx, uint8_t data_idx,uint16_t x,uint16_t y,uint8_t z,uint8_t palette){
 
-    uint32_t offset=BACKGROUND_CONTROL_BASE+idx*4;
+
     y=(y+288)& 0x3FF;
     x=(x+512)& 0x3FF;
     z=(z+0)& 0x7;
     palette=palette&0x3;
-    uint32_t value=(idx<<29)|(z<<22)|(y<12)|(x<<2)|palette;
-    uint32_t* addr=(uint32_t*) offset;
-    *addr=value;    
+    uint32_t value=(data_idx<<29)|(z<<22)|(y<12)|(x<<2)|palette;
+    BACKGROUND_CONTROL[ctrl_idx]=value;
 }
-void setSpriteControl(uint32_t idx,uint32_t x,uint32_t y,uint32_t z,uint32_t palette,Sprite sprites){
-    uint32_t offset=0;
+
+void setTileBackGroundControl(uint8_t ctrl_x,uint8_t tile_idx,uint8_t sub_idx,uint16_t x, uint16_t y, uint8_t z,uint8_t palette){
+
+    y=(y+288)& 0x3FF;
+    x=(x+512)& 0x3FF;
+    z=(z+0)& 0x7;
+    palette=palette&0x3;
+    BACKGROUND_CONTROL[ctrl_x]=(1<<31)|(tile_idx<<28)|(sub_idx<<25)|(z<<22)|((y+288)<<12)|((x+512)<<2)|palette;
+}
+
+
+void setSpriteControl(uint8_t ctrl_idx,uint8_t data_idx,uint16_t x,uint16_t y,uint16_t z,uint8_t palette,Sprite sprites){
+    volatile uint32_t* base=0;
+    uint8_t size=0;
     switch (sprites)
     {
     case Large:
-        offset=LARGE_SPRITE_CONTROL_BASE+idx*4;
-        y=(y+LARGE_SPRITES_SIZE)&0x3FF;
-        x=(x+LARGE_SPRITES_SIZE)&0x3FF;
+        size=LARGE_SPRITES_SIZE;
+        base=LARGE_SPRITE_CONTROL;
         break;
     case Medium:
-        offset=MEDIUM_SPRITE_CONTROL_BASE+idx*4;
-        y=(y+MEDIUM_SPRITES_SIZE)&0x3FF;
-        x=(x+MEDIUM_SPRITES_SIZE)&0x3FF;
+        size=MEDIUM_SPRITES_SIZE;
+        base=MEDIUM_SPRITE_CONTROL;
         break;
     case Small:
-        offset=SMALL_SPRITE_CONTROL_BASE+idx*4;
-        y=(y+SMALL_SPRITES_SIZE)&0x3FF;
-        x=(x+SMALL_SPRITES_SIZE)&0x3FF;
+        size=SMALL_SPRITES_SIZE;
+        base=SMALL_SPRITE_CONTROL;
         break;
     default:
         break;
     }
-    z=(z+0) &0x7;
-    palette=palette&0x3;
-    uint32_t value=(idx<<24)|(z<<21)|(y<12)|(x<<2)|palette;
-    uint32_t* addr=(uint32_t*) offset;
-    *addr=value;    
+    base[ctrl_idx]=(data_idx<<24)|(z<<21)|((y+size)<<12)|((x+size)<<2)|palette;
+
+}
+
+
+// reference https://github.com/fangqyi/riscv-console
+
+// Function to set background
+void setBackground(uint8_t backgroundIndex, char* pixelData, uint8_t controlIndex,
+                   uint8_t pixelIndex, uint8_t tileIndex, uint8_t subIndex,
+                   uint16_t posX, uint16_t posY, uint8_t zIndex,
+                   uint8_t paletteIndex, uint32_t* paletteData) {
+    setBackGround(backgroundIndex, pixelData);
+    setBackGroundControl(controlIndex, pixelIndex, posX, posY, zIndex, paletteIndex);
+    setTileBackGroundControl(controlIndex, tileIndex, subIndex, posX, posY, zIndex, paletteIndex);
+    initBackGroundPalettes(paletteIndex, paletteData);
+}
+
+// Function to set a large sprite
+void setLargeSprite(uint8_t spriteIndex, uint8_t* spriteData, uint8_t controlIndex,
+                    uint8_t spriteDataIndex, uint16_t posX, uint16_t posY,
+                    uint16_t zIndex, uint8_t paletteIndex, uint32_t* paletteData) {
+    setSprite(spriteIndex, spriteData, Large);
+    setSpriteControl(controlIndex, spriteDataIndex, posX, posY, zIndex, paletteIndex, Large);
+    initSpritesPalettes(paletteIndex, paletteData, Large);
+}
+
+// Function to set a medium sprite
+void setMediumSprite(uint8_t spriteIndex, uint8_t* spriteData, uint8_t controlIndex,
+                     uint8_t spriteDataIndex, uint16_t posX, uint16_t posY,
+                     uint16_t zIndex, uint8_t paletteIndex, uint32_t* paletteData) {
+    setSprite(spriteIndex, spriteData, Medium);
+    setSpriteControl(controlIndex, spriteDataIndex, posX, posY, zIndex, paletteIndex, Medium);
+    initSpritesPalettes(paletteIndex, paletteData, Medium);
+}
+
+// Function to set a small sprite
+void setSmallSprite(uint8_t spriteIndex, uint8_t* spriteData, uint8_t controlIndex,
+                    uint8_t spriteDataIndex, uint16_t posX, uint16_t posY,
+                    uint16_t zIndex, uint8_t paletteIndex, uint32_t* paletteData) {
+    setSprite(spriteIndex, spriteData, Small);
+    setSpriteControl(controlIndex, spriteDataIndex, posX, posY, zIndex, paletteIndex, Small);
+    initSpritesPalettes(paletteIndex, paletteData, Small);
+}
+
+void simple_medium_sprite(int16_t x, int16_t y, int16_t z) {
+    MODE_CONTROL_REG = 0x01;
+
+    uint8_t sprite_data[0x400];
+    uint32_t palette_data[0x100];
+
+    // Fill palette data and sprite data
+    for (int i = 0; i < 0x20; i++) {
+        for (int j = 0; j < 0x20; j++) {
+            palette_data[(i * 0x20 + j) % 0x100] = 0;
+            sprite_data[i * 0x20 + j] = i < 0x10 ? 0 : 1;
+        }
+    }
+
+    // Set specific colors in the palette
+    palette_data[0] = GREEN;
+    palette_data[1] = RED;
+
+    // Use your API functions to set the medium sprite palette, data, and control
+    initSpritesPalettes(2, palette_data, Medium);
+    setSprite(10, sprite_data, Medium);
+    setSpriteControl(5, 10, x, y, z, 2, Medium);
 }

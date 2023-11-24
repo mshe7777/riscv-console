@@ -2,7 +2,8 @@
 .global initialize
 .global getTicks,getButtonStatus,getCmdInterrupted,getVideoInterrupted,threadInit
 .global thread_create,thread_yield,thread_exit
-.global kmalloc, kfree
+.global set_small_sprite,set_medium_sprite,set_large_sprite,set_background
+.global Malloc, Free, Memcpy
 
 
 
@@ -45,6 +46,16 @@ thread_yield:
 thread_exit:
     li a5,8
     ecall
+Memcpy:
+    li a5,9
+    ecall
 
+Malloc:
+    li a5,10
+    ecall
+
+Free:
+    li a5,11
+    ecall
 
     

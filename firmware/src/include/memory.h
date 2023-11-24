@@ -20,9 +20,11 @@ char *_sbrk(int numbytes);
 static char *heap_ptr = NULL;
 // static struct Block *free_list = NULL;
 
+
+// system_calls
 void *kmalloc(size_t size);
 void kfree(void* ptr);
-
+void kmemcpy(uint8_t* dst, uint8_t* src, size_t num);
 
 
 

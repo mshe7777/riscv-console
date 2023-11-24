@@ -39,6 +39,12 @@ void kfree(void *ptr) {
  size_t *header = (char *)ptr - SIZE_T_SIZE;
 //  *header = *header & ~1L; // unmark allocated bit
 }
+void kmemcpy(uint8_t* dst, uint8_t* src, size_t num) {
+    for (size_t i = 0; i < num; i++) {
+        dst[i] = src[i];
+    }
+};
+
 
 // void *kmalloc(size_t size) {
 //     // 遍历空闲链表，找到第一个足够大的块

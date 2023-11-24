@@ -14,6 +14,9 @@ void SwitchThread(TThreadContext *oldcontext, TThreadContext newcontext);
 
 TThreadContext OtherThread;
 TThreadContext MainThread;
+TThreadContext MainThread_copy;
+
+int count=0;
 
 int main() {
     int a = 4;
@@ -67,7 +70,9 @@ int main() {
                 }
                 VIDEO_MEMORY[x_pos] = 'X';
             }
+            MainThread_copy=MainThread;
             SwitchThread(&MainThread,OtherThread);
+            MainThread_copy=MainThread;
             last_global = global;
         }
     }
@@ -76,11 +81,13 @@ int main() {
 
 void OtherThreadFunction(void *){
     int last_global = global;
-    while(1){
-        VIDEO_MEMORY[0x40*1+0]='A';
+    while(count<40){
+        VIDEO_MEMORY[0x40*1+count++]='A';
         if(global != last_global){
             SwitchThread(&OtherThread,MainThread);
             last_global = global;
         }
     }
+    SwitchThread(&OtherThread,MainThread);
+    return;
 }

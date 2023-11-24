@@ -50,7 +50,10 @@ void schedule(scheduler* schedule){
     schedule->current_tid=schedule->next_tid;
     running_thread_id=schedule->current_tid;
     if(schedule->next_tid!=curr_thread->tid){
+        TContextEntry main_thread=threadArray[0]->sp;
         ContextSwitch(&threadArray[curr_thread->tid]->sp,threadArray[schedule->next_tid]->sp);
+        main_thread=threadArray[0]->sp;
+
     }
 
 }
