@@ -13,12 +13,15 @@ typedef uint32_t ThreadID;
 typedef uint32_t ThreadReturn;
 typedef uint32_t Tick;
 
+#define THREAD_MEMORY 2048
+
+
 typedef enum{
-    Created,
-    Ready,
-    Running,
-    Waiting,
-    Dead
+    INIT=0,
+    READY,
+    RUNNING,
+    WAITING,
+    FINISHED
 }ThreadStatus;
 
 typedef enum{
@@ -34,7 +37,7 @@ typedef struct TCB
     uint32_t *gp;
     ThreadStatus state;
     ThreadPriority priority;
-    uint32_t* sp;
+    uint32_t* sp; // TStackRef
     uint32_t memory_size;
     TContextEntry entry;
     void* param;
@@ -49,19 +52,24 @@ typedef struct TCB
 
 
 
+
+
+extern struct TCB** threadArray;
 extern volatile ThreadID global_tid;
 
 TStackRef ContextInitialize(TStackRef stacktop, TContextEntry entry, void *param);
 void ContextSwitch(TStackRef *storecurrent, TStackRef restore);
-
+void set_tp(ThreadID tid);
+ThreadID get_tp(void);
 // simple
 TStatus threadInit(TContextEntry entry, void *param);
-
+uint32_t *init_Stack(uint32_t* sp, TContextEntry function, uint32_t param, uint32_t tp);
 // Thread variable
 extern uint32_t ThreadStack[9][2048];
 extern TStackRef ThreadPointers[10];
 extern int current_thread_num;
 extern int running_thread_pointer;
+extern ThreadID running_thread_id;
 
 
 // implement in kernel.c
@@ -77,6 +85,11 @@ TStatus threadSleep(Tick tick); // unknow?
 
 
 
+// system calls
+ThreadID thread_create(TContextEntry entry, void* param, uint32_t  memsize,ThreadPriority prio);
+TStatus thread_yield(ThreadID tid);
+// exit current thread
+TStatus thread_exit();
 
 
 
@@ -89,8 +102,7 @@ TStatus threadSleep(Tick tick); // unknow?
 
 
 
-
-__attribute__((always_inline)) inline TInterruptState CPUHALSuspendInterrupts(void)
+__attribute__((always_inline)) inline TInterruptState SuspendInterrupts(void)
 {
     uint32_t result;
     asm volatile("csrrci %0, mstatus, 0x8"
@@ -98,19 +110,19 @@ __attribute__((always_inline)) inline TInterruptState CPUHALSuspendInterrupts(vo
     return result;
 }
 
-__attribute__((always_inline)) inline void CPUHALResumeInterrupts(TInterruptState state)
+__attribute__((always_inline)) inline void ResumeInterrupts(TInterruptState state)
 {
     asm volatile("csrs mstatus, %0"
                  :
                  : "r"(state & 0x8));
 }
 
-__attribute__((always_inline)) inline void CPUHALEnableInterrupts(void)
+__attribute__((always_inline)) inline void EnableInterrupts(void)
 {
     asm volatile("csrsi mstatus, 0x8");
 }
 
-__attribute__((always_inline)) inline void CPUHALDisableInterrupts(void)
+__attribute__((always_inline)) inline void DisableInterrupts(void)
 {
     asm volatile("csrci mstatus, 0x8");
 }

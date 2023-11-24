@@ -13,6 +13,9 @@ _start:
     csrw mtvec, a5
     jal ra, init
     nop
+    mv      a0, gp
+    jal     ra, initialize
+    nop
     jal zero, main
     .cfi_endproc
     .end

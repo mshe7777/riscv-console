@@ -4,7 +4,7 @@ volatile uint32_t *MODE_CONTROL_REG=(volatile uint32_t *)(0x50000000+0xF6780);
 
 
 void setVideoModel(int cmd){
-    (*MODE_CONTROL_REG)^=(cmd&0x1);
+    (*MODE_CONTROL_REG)|=(cmd&0x1);
 }
 int writeMemory(uint32_t mem_handle,uint32_t addr,uint32_t size){
     uint32_t* transfer_addr=(uint32_t*)mem_handle;
