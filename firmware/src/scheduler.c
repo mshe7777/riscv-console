@@ -27,7 +27,6 @@ void interruptSwicth(scheduler* schedule){
     ContextSwitch(&threadArray[curr_tid]->sp,threadArray[next_tid]->sp);
 }
 
-// reference https://github.com/XiaoxingChen/flitos/tree/chenxx/develop
 void yield(scheduler* schedule){
     switchThreadStateTo(schedule,READY);
 }
