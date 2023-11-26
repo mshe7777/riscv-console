@@ -6,6 +6,8 @@
 typedef uint32_t ThreadID; 
 typedef uint32_t TStatus;// total status
 typedef uint32_t (*TContextEntry)(void *param);
+typedef uint32_t MutexId;
+typedef uint32_t CondId;
 
 typedef enum{
     High=0,
@@ -20,19 +22,34 @@ typedef enum{
     FINISHED
 }ThreadStatus;
 
+void set_gp(uint32_t* gp);
+uint32_t* get_gp(void);
+
 
 // system calls thread
 ThreadID thread_create(TContextEntry entry, void* param, uint32_t  memsize,ThreadPriority prio);
 TStatus thread_yield(ThreadID tid);
 // exit current thread
 TStatus thread_exit();
+TStatus threadInit(TContextEntry entry, void *param);
+
+// mutex
+
+void lock(MutexId mid);
+void unlock(MutexId mid);
+MutexId initLock();
+TStatus destroyLock(MutexId mid);
+
+// memory
 void kmemcpy(uint8_t* dst, uint8_t* src, size_t num) ;
 
+// struct scheduler* sched;
 
+// void startFirstThread(scheduler* schedule);
+// init
+void initialize(uint32_t* gp);
 
-
-
-
+#define THREAD_MEMORY 2048
 // video
 #define DISPLAY_WITDH 512
 #define DISPLAY_HEIGHT 288

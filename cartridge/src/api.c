@@ -1,9 +1,9 @@
 #include "api.h"
 
 // systems calls memory
-// void* Memcpy(uint8_t* dst,uint8_t* src,size_t num);
-// void Free(void* ptr);
-// void Malloc(uint8_t* dst,uint8_t* src,size_t num);
+void* Memcpy(uint8_t* dst,uint8_t* src,size_t num);
+void Free(void* ptr);
+void Malloc(uint8_t* dst,uint8_t* src,size_t num);
 
 // something reference https://github.com/fangqyi/riscv-console
 // mem map for background controls 0x100(256B)
