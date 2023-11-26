@@ -52,3 +52,6 @@ _system_call:
     lw	    gp,0(sp)
     addi	sp,sp,4
     mret
+
+
+# reference https://github.com/XiaoxingChen/flitos/blob/chenxx/develop/riscv-firmware/src/interrupt.s

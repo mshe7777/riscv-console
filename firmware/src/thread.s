@@ -1,5 +1,5 @@
 .section .text, "ax"
-.global ContextInitialize, ContextSwitch, call_th_ent, set_tp
+.global get_gp, ContextInitialize, ContextSwitch, call_th_ent, set_tp,startFirst
 
 ContextInitialize:
     addi a0,a0,-56
@@ -20,6 +20,7 @@ ContextInitialize:
     ret
 
 ContextSwitch:
+    # csrci   mstatus, 0x8
     addi sp,sp,-56
     sw   ra,52(sp)
     sw   gp,48(sp)
@@ -55,6 +56,30 @@ ContextSwitch:
     csrsi mstatus, 0x8
     ret
 
+startFirst:
+    # csrci   mstatus, 0x8
+    mv   sp,a0
+    lw   ra,52(sp)
+    lw   gp,48(sp)
+    lw   tp,44(sp)
+    lw   t0,40(sp)
+    lw   t1,36(sp)
+    lw   t2,32(sp)
+    lw   s0,28(sp)
+    lw   s1,24(sp)
+    lw   a0,20(sp)
+    lw   a1,16(sp)
+    lw   a2,12(sp)
+    lw   a3,8(sp)
+    lw   a4,4(sp)
+    lw   a5,0(sp)
+    addi sp,sp,56
+    # csrsi mstatus, 0x8
+    ret
+
+get_gp:
+    mv a0,gp
+    ret
 # ContextSwitch:
 #     addi    sp,sp,-52
 #     sw      ra,48(sp)

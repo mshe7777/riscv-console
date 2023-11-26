@@ -14,3 +14,19 @@ _start:
     jal zero, main
     .cfi_endproc
     .end
+
+
+# .section .text, "ax"
+# .global Malloc, Free, Memcpy
+
+# Memcpy:
+#     li a5,9
+#     ecall
+
+# Malloc:
+#     li a5,10
+#     ecall
+
+# Free:
+#     li a5,11
+#     ecall

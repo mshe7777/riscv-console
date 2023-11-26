@@ -87,7 +87,7 @@ TStatus threadSleep(Tick tick); // unknow?
 
 // system calls
 ThreadID thread_create(TContextEntry entry, void* param, uint32_t  memsize,ThreadPriority prio);
-TStatus thread_yield(ThreadID tid);
+TStatus thread_yield();
 // exit current thread
 TStatus thread_exit();
 

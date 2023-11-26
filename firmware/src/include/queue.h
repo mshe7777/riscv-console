@@ -16,5 +16,6 @@ void enqueue(Queue *q, int value);
 int dequeue(Queue *q);
 // void printQueue(Queue *q);
 void destroyQueue(Queue *q);
+int erase(Queue* q, int value);
 
 #endif /* QUEUE_H */

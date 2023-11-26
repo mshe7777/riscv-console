@@ -1,4 +1,6 @@
 #include <stdint.h>
+#include "api.h"
+
 
 volatile int global = 42;
 volatile uint32_t controller_status = 0;
@@ -6,6 +8,8 @@ volatile uint32_t *MODE_REGISTER = (volatile uint32_t *)(0x500F6780);
 
 
 volatile char *VIDEO_MEMORY = (volatile char *)(0x50000000 + 0xF4800);
+
+void simple_medium_sprite(int16_t x, int16_t y, int16_t z);
 int main() {
     int a = 4;
     int b = 12;
@@ -28,6 +32,10 @@ int main() {
     VIDEO_MEMORY[11] = '!';
     VIDEO_MEMORY[12] = 'X';
 
+    simple_medium_sprite(0,0,0);
+
+
+    
 
     while (1) {
         int c = a + b + global;

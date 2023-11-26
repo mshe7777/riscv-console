@@ -11,49 +11,70 @@ TStatus initScheduler(scheduler* schedule){
 
 };
 
-void switchThreadStateTo(ThreadID tid, const ThreadStatus new_state){
-    struct TCB* current=threadArray[tid];
-    current->state=new_state;
+void interruptSwicth(scheduler* schedule){
+    // switchThreadStateTo(schedule,READY);
+    // ?
+    if(isEmpty(schedule->ready)) return;
+
+    ThreadID curr_tid=schedule->current_tid;
+    ThreadID next_tid=dequeue(schedule->ready);
+
+    threadArray[curr_tid]->state=READY;
+    threadArray[next_tid]->state=RUNNING;
+    enqueue(schedule->ready,curr_tid);
+
+    schedule->current_tid=next_tid;
+    ContextSwitch(&threadArray[curr_tid]->sp,threadArray[next_tid]->sp);
 }
 
-// get the tid for running
-void schedule(scheduler* schedule){
+// reference https://github.com/XiaoxingChen/flitos/tree/chenxx/develop
+void yield(scheduler* schedule){
+    switchThreadStateTo(schedule,READY);
+}
 
-    // struct Process next=dequeue;
-    struct TCB* curr_thread=threadArray[schedule->current_tid];
-    if(curr_thread->state==RUNNING){
-        curr_thread->state=READY;
-        enqueue(schedule->ready,schedule->current_tid);
-    }
+void suspend(scheduler* schedule){
+    switchThreadStateTo(schedule,WAITING);
+}
 
-    schedule->next_tid=dequeue(schedule->ready);
-    struct TCB* next_thread=threadArray[schedule->next_tid];
-    if(next_thread->state==WAITING){
-            enqueue(schedule->waiter,next_thread->tid);
-    }
-
-    while(next_thread->state!=READY)
-    {    
-        schedule->next_tid=dequeue(schedule->ready);
-        struct TCB* next_thread=threadArray[schedule->next_tid];
-        if(next_thread->state==WAITING){
-            enqueue(schedule->waiter,next_thread->tid);
-        }
-    }
-    // schedule->next_tid=(schedule->current_tid+1)%current_thread_num;
-    int cur_num=schedule->ready->size;
-    if(schedule->next_tid==-1){
-        schedule->next_tid=schedule->current_tid;
-    }
+void resume(scheduler* schedule, ThreadID tid){
     
-    switchThreadStateTo(schedule->next_tid,RUNNING);
-    schedule->current_tid=schedule->next_tid;
-    running_thread_id=schedule->current_tid;
-    if(schedule->next_tid!=curr_thread->tid){
-        TContextEntry main_thread=threadArray[0]->sp;
-        ContextSwitch(&threadArray[curr_thread->tid]->sp,threadArray[schedule->next_tid]->sp);
-        main_thread=threadArray[0]->sp;
-
-    }
-
+    threadArray[tid]->state=READY;
+    enqueue(schedule->ready,tid);
 }
+void kexit(scheduler* schedule){
+    switchThreadStateTo(schedule,FINISHED);
+}
+
+
+
+
+void startFirstThread(scheduler* schedule){
+    if(isEmpty(schedule->ready)) return;
+    ThreadID cur_tid=dequeue(schedule->ready);
+    threadArray[cur_tid]->state=RUNNING;
+    schedule->current_tid=cur_tid;
+    startFirst((uint32_t)(threadArray[cur_tid]->sp));
+}
+
+void switchThreadStateTo(scheduler* schedule,const ThreadStatus new_state){
+    if(new_state!=READY&&new_state!=WAITING&&new_state!=FINISHED){
+        return;
+    }
+    if(isEmpty(schedule->ready)) return;
+    ThreadID curr_tid=schedule->current_tid;
+    ThreadID next_tid=dequeue(schedule->ready);
+
+    threadArray[curr_tid]->state=new_state;
+    threadArray[next_tid]->state=RUNNING;
+
+    if(new_state==READY){
+        enqueue(schedule->ready,curr_tid);
+    }else if(new_state==FINISHED){
+        enqueue(schedule->finished,curr_tid);
+    }
+    DisableInterrupts();
+    schedule->current_tid=next_tid;
+    ContextSwitch(threadArray[curr_tid]->sp,threadArray[next_tid]->sp);
+    EnableInterrupts();
+}
+

@@ -3,6 +3,7 @@
 #include "include/kernel.h"
 #include "include/thread.h"
 #include "include/memory.h"
+#include "include/mutex.h"
 
 
 
@@ -78,6 +79,8 @@ void  c_interrupt_handler(int mcause,int mepc){
             {
                 global = 0;
             }
+            // update the systick
+            // updateAllTick();
         }
         break;
         case EXTERNAL:{
@@ -126,6 +129,7 @@ uint32_t c_system_call(uint32_t a0,uint32_t a1,uint32_t a2,uint32_t a3, uint32_t
     uint32_t ret=0xffffffff;
     if(call ==0){
         // OSinitialize
+        // Deprecated!
         ret=OSinitialize((void *)a0);
     }
     else if(call == 1){
@@ -170,6 +174,24 @@ uint32_t c_system_call(uint32_t a0,uint32_t a1,uint32_t a2,uint32_t a3, uint32_t
     }else if(call==11){
         // _free
         kfree((void*)(a0));
+    }else if(call==12){
+        // lock
+        mutexLock(sched,mutexArray[(MutexId)a0]);
+    }else if(call==13){
+        // unlock
+        mutexRelease(sched,mutexArray[(MutexId)a0]);
+    }else if(call==14){
+        // initLock
+        ret=mutexCreate();
+    }else if(call==15){
+        // destoryLock
+        // if(mutexArray[])
+        if(mutexArray[(MutexId)a0]!=NULL){
+            ret=STATUS_SUCCESS;
+        }else{
+            ret=STATUS_FAILURE;
+        }
+        mutexArray[(MutexId)a0]=NULL;
     }
 
 

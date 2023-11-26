@@ -2,7 +2,6 @@
 #include<stdint.h>
 #include <stddef.h>
 
-
 // timer
 #define INTER_PENDING   (*((volatile uint32_t *)0x40000004))
 #define MTIME_LOW       (*((volatile uint32_t *)0x40000008))
@@ -46,6 +45,7 @@ uint32_t getButtonStatus();
 uint32_t getCmdInterrupted();
 uint32_t getVideoInterrupted();
 
+void startFirst( uint32_t stk_ptr );
 
 
 // thread def
@@ -67,9 +67,15 @@ void set_timer(uint64_t msec);
 void handle_time_interrupt();
 
 
-
+uint32_t* get_gp();
+TStatus OSinitialize(uint32_t *gp);
 
 // global variables
+
+
+// mutex&sleep&wait&condition
+typedef uint32_t MutexId;
+typedef uint32_t CondId;
 
 
 

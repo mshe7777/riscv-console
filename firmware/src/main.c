@@ -5,6 +5,8 @@
 #include "include/video.h"
 #include "include/thread.h"
 #include "include/memory.h"
+#include "include/scheduler.h"
+#include "include/mutex.h"
 
 
 // volatile int global = 42;
@@ -135,9 +137,9 @@
 // }
 
 // volatile int global = 42;
-// volatile uint32_t controller_status = 0;
+// // volatile uint32_t controller_status = 0;
 
-// volatile char *VIDEO_MEMORY = (volatile char *)(0x50000000 + 0xF4800);
+// // volatile char *VIDEO_MEMORY = (volatile char *)(0x50000000 + 0xF4800);
 // volatile int start_main_pos=0x40*2;
 // volatile int start_other_pos=0x40*3;
 
@@ -204,14 +206,11 @@
 //                         x_pos++;
 //                     }
 //                 }
-//                 VIDEO_MEMORY[x_pos] = 'X';
 //             }
-//             VIDEO_MEMORY[start_main_pos]='A';
-//             VIDEO_MEMORY[start_other_pos]=' ';
-//             // ContextSwitch(&MainThread,OtherThread);
-//             last_global = global;
 //         }
 //     }
+
+
 //     return 0;
 // }
 
@@ -230,88 +229,109 @@
 
 // thread_test
 
-// volatile int global = 42;
-// volatile int pos1=0x40*1;
-// volatile int pos2=0x40*2;
-// volatile int count1=0;
-// volatile int count2=0;
-// void thread1(void *){
-//     while (count1<40)
-//     {   
-//         VIDEO_MEMORY[pos1+count1++]='A';
-//         /* code */
-//     }
-//     // explict
-//     thread_exit();
-//     return;
-// }
-// void thread2(void *){
-//     while (count2<40)
-//     {
-//         /* code */
-//         VIDEO_MEMORY[pos2+count2++]='B';
-//     }
-//     thread_exit();
-//     return;
-// }
-
-// void memory_test(){
-//     char *Buffer=malloc(32);
-//     strcpy(Buffer,"MEMORY TEST");
-//     strcpy((char *)(VIDEO_MEMORY),Buffer);
-
-// }
-
-// int main(){
-//     // char *Buffer = malloc(32);
-//     // strcpy(Buffer,"OS started!");
-//     // strcpy((char *)(VIDEO_MEMORY),Buffer);
-//     memory_test();
-//     // threadInit(thread1,NULL);
-//     // threadInit(thread2,NULL);
-//     ThreadID t1=thread_create(thread1,NULL,THREAD_MEMORY,High);
-//     // ThreadID t2=thread_create(thread2,NULL,THREAD_MEMORY,High);
-
-//     thread_yield(t1);
-//     // thread_yield(t2);
-
-
-
-//     char *Buffer2 = malloc(32);
-//     strcpy(Buffer2,"Thread test1 finished");
-//     strcpy((char *)(VIDEO_MEMORY+0x40*5),Buffer2);
-//     while(1){
-
-//     }
-    
-// }
-
-
-// video_test
-// volatile uint32_t controller_status = 0;
 volatile int global = 42;
+volatile int pos1=0x40*1;
+volatile int pos2=0x40*2;
+volatile int count1=0;
+volatile int count2=0;
+MutexId mid;
 
-// int pthread_mutex_lock(pthread_mutex_t *mutex);
-// int pthread_mutex_unlock(pthread_mutex_t *mutex);
-// to here
+void thread1(void *){
+    while (1)
+    {   
+        // VIDEO_MEMORY[pos1]='A';
+        // VIDEO_MEMORY[pos2]=' ';
+        /* code */
+        // switch
+        // thread_yield()
+        // lock(mid);
 
+        VIDEO_MEMORY[pos1]='A';
+        VIDEO_MEMORY[pos2]=' ';
+        // unlock(mid);
+        // thread_yield();
+    }
+    // explict
+    thread_exit();
+    return;
+}
+void thread2(void *){
+    while (1)
+    {
+        /* code */
+        // thread_yield();
+        // lock(mid);
+        VIDEO_MEMORY[pos2]='B';
+        VIDEO_MEMORY[pos1]=' ';
+        // unlock(mid);
+        // thread_yield();
+    }
+    thread_exit();
+    return;
+}
 
-//cartridge setup
-volatile uint32_t *CartridgeStatus = (volatile uint32_t *)(0x4000001C);
-typedef void (*FunctionPtr)(void);
+void memory_test(){
+    char *Buffer=malloc(32);
+    strcpy(Buffer,"OS TEST");
+    strcpy((char *)(VIDEO_MEMORY),Buffer);
 
+}
 
 int main(){
-    simple_medium_sprite(0,0,0);
-    VIDEO_MEMORY[0]='A';
+    OSinitialize(get_gp());
+    mid=initLock();
+    // char *Buffer = malloc(32);
+    // strcpy(Buffer,"OS started!");
+    // strcpy((char *)(VIDEO_MEMORY),Buffer);
+    memory_test();
+    // threadInit(thread1,NULL);
+    // threadInit(thread2,NULL);
+    // DisableInterrupts();
+    ThreadID t1=thread_create(thread1,NULL,THREAD_MEMORY,High);
+    ThreadID t2=thread_create(thread2,NULL,THREAD_MEMORY,High);
+    // startFirstThread(sched);
+    
+    // thread_yield(t1);
+    // thread_yield(t2);
 
-    //loading cartridge
-    while (1){
-        if(*CartridgeStatus & 0x1){
-            FunctionPtr Fun = (FunctionPtr)((*CartridgeStatus) & 0xFFFFFFFC);
-            Fun();
-        }
+
+
+    char *Buffer2 = malloc(32);
+    strcpy(Buffer2,"Thread test1 finished");
+    strcpy((char *)(VIDEO_MEMORY+0x40*5),Buffer2);
+    while(1){
+
     }
     
-    return 0;
 }
+
+
+
+// final test
+// volatile uint32_t controller_status = 0;
+// volatile int global = 42;
+
+// // int pthread_mutex_lock(pthread_mutex_t *mutex);
+// // int pthread_mutex_unlock(pthread_mutex_t *mutex);
+// // to here
+
+
+// //cartridge setup
+// volatile uint32_t *CartridgeStatus = (volatile uint32_t *)(0x4000001C);
+// typedef void (*FunctionPtr)(void);
+
+
+// int main(){
+//     // simple_medium_sprite(0,0,0);
+//     VIDEO_MEMORY[0]='A';
+
+//     //loading cartridge
+//     while (1){
+//         if(*CartridgeStatus & 0x1){
+//             FunctionPtr Fun = (FunctionPtr)((*CartridgeStatus) & 0xFFFFFFFC);
+//             Fun();
+//         }
+//     }
+    
+//     return 0;
+// }

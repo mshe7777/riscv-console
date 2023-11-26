@@ -1,17 +1,17 @@
 .section .text, "ax"
-.global initialize
+# .global initialize
 .global getTicks,getButtonStatus,getCmdInterrupted,getVideoInterrupted,threadInit
 .global thread_create,thread_yield,thread_exit
-.global set_small_sprite,set_medium_sprite,set_large_sprite,set_background
 .global Malloc, Free, Memcpy
+.global lock, unlock, initLock,destoryLock
 
 
 
 
 
-initialize:
-    li a5,0
-    ecall
+# initialize:
+#     li a5,0
+#     ecall
 
 getTicks:
     li a5,1
@@ -46,6 +46,8 @@ thread_yield:
 thread_exit:
     li a5,8
     ecall
+
+
 Memcpy:
     li a5,9
     ecall
@@ -56,6 +58,22 @@ Malloc:
 
 Free:
     li a5,11
+    ecall
+
+lock:
+    li a5,12
+    ecall
+
+unlock:
+    li a5,13
+    ecall
+
+initLock:
+    li a5,14
+    ecall
+
+destoryLock:
+    li a4,15
     ecall
 
     
