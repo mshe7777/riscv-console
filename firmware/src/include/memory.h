@@ -28,7 +28,7 @@ void kmemcpy(uint8_t* dst, uint8_t* src, size_t num);
 
 void* Memcpy(uint8_t* dst,uint8_t* src,size_t num);
 void Free(void* ptr);
-void Malloc(uint8_t* dst,uint8_t* src,size_t num);
+void *Malloc(size_t size);
 
 
 #endif
