@@ -4,15 +4,7 @@
 #include "api.h"
 
 
-
-
 void simple_medium_sprite(int16_t x, int16_t y, int16_t z);
-
-
-// void memory_test(){
-
-// }
-// volatile int global = 42;
 
 
 void thread1(void *){
@@ -70,8 +62,6 @@ void thread_test(){
     // startFirstThread(sched);
     uint32_t* global_gp=get_gp();
 }
-
-
 
 
 int main() {
