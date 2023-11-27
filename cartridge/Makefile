@@ -9,7 +9,7 @@ OBJCOPY=$(TOOLPREFIX)objcopy
 OBJDUMP=$(TOOLPREFIX)objdump
 STRIP=$(TOOLPREFIX)strip
 
-KERNEL_INC_DIR=../riscv-firmware/src/include
+KERNEL_INC_DIR=../firmware/src/include
 INC_DIR = ./include
 SRC_DIR = ./src
 OBJ_DIR = ./obj
@@ -32,7 +32,7 @@ CFLAGS   += -ffreestanding  -nostartfiles
 LDFLAGS  +=
 LDFLAGS  += -Wl,--gc-sections -Wl,-T,$(LDFILE)
 
-TARGET_NAME = riscv-cartridge
+TARGET_NAME = cartridge
 
 TARGET_OBJS =   $(OBJ_DIR)/main.o               \
                 $(OBJ_DIR)/crt0.o               \
