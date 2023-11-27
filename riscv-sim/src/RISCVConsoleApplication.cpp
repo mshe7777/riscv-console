@@ -27,10 +27,10 @@ CRISCVConsoleApplication::CRISCVConsoleApplication(const std::string &appname, s
     
     auto VideoController = CVideoControllerAllocator::Allocate(GetVideoControllerModel(), DGraphicFactory);
     DRISCVConsole = std::make_shared<CRISCVConsole>(GetTimerUS(),GetScreenTimeoutMS(),GetCPUFrequency(),VideoController);
-    DInputRecorder = std::make_shared<CAutoRecorder>(GetTimerUS(),GetScreenTimeoutMS(),GetCPUFrequency());
+    DInputRecorder = std::make_shared<CAutoRecorder>(GetTimerUS(),GetScreenTimeoutMS(),GetCPUFrequency(),GetVideoControllerModel());
     DApplication->SetActivateCallback(this, ActivateCallback);
     DVariableTranslator = std::make_shared<CVariableTranslator>(DRISCVConsole->CPU(), DRISCVConsole->Memory());
-    
+    DVariableTranslator->MaxPointerDepth(GetMaxPointerDepth());
 }
 
 CRISCVConsoleApplication::~CRISCVConsoleApplication(){
@@ -534,7 +534,6 @@ bool CRISCVConsoleApplication::ClearButtonClickEvent(std::shared_ptr<CGUIWidget>
 }
 
 bool CRISCVConsoleApplication::RecordButtonToggledEvent(std::shared_ptr<CGUIWidget> widget){
-
     if(!DDebugRecordButton->GetActive()){
         std::string Filename;
         auto FileChooser = DGUIFactory->NewFileChooserDialog("Save Record",false,DMainWindow);
@@ -1095,6 +1094,14 @@ uint32_t CRISCVConsoleApplication::GetVideoControllerModel(){
         VideoControllerModel = CVideoControllerAllocator::MaxModel();
     }
     return VideoControllerModel;
+}
+
+uint32_t CRISCVConsoleApplication::GetMaxPointerDepth(){
+    auto PointerDepth = DConfiguration.GetIntegerParameter(CRISCVConsoleApplicationConfiguration::EParameter::PointerDepth);
+    if(16 < PointerDepth){
+        PointerDepth = 16;
+    }
+    return PointerDepth;
 }
 
 std::string CRISCVConsoleApplication::CreateRegisterTooltip(size_t index){
