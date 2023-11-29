@@ -228,3 +228,10 @@ void simple_medium_sprite_red(int16_t x, int16_t y, int16_t z) {
     setSprite(10, sprite_data, Medium);
     setSpriteControl(5, 10, x, y, z, 2, Medium);
 }
+
+ThreadID thread_create_gp(TContextEntry entry,void* param,uint32_t memsize,ThreadPriority prio){
+    uint32_t thread_gp;
+    asm volatile ("mv %0,gp":"=r"(thread_gp));
+    thread_create(entry,param,memsize,prio,thread_gp);
+
+}

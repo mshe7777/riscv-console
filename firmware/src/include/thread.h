@@ -57,7 +57,7 @@ typedef struct TCB
 extern struct TCB** threadArray;
 extern volatile ThreadID global_tid;
 
-TStackRef ContextInitialize(TStackRef stacktop, TContextEntry entry, void *param);
+TStackRef ContextInitialize(TStackRef stacktop, TContextEntry entry, void *param,uint32_t gp);
 void ContextSwitch(TStackRef *storecurrent, TStackRef restore);
 void set_tp(ThreadID tid);
 ThreadID get_tp(void);
@@ -74,7 +74,7 @@ extern ThreadID running_thread_id;
 
 // implement in kernel.c
 // more api create delete activate terminate wait id state
-ThreadID threadCreate(TContextEntry entry,void *param,uint32_t memsize,ThreadPriority prio);
+ThreadID threadCreate(TContextEntry entry,void *param,uint32_t memsize,ThreadPriority prio,uint32_t gp);
 TStatus threadDelete(ThreadID tid);
 TStatus threadActivate(ThreadID tid);
 TStatus threadTerminate(ThreadID tid,ThreadReturn retval);

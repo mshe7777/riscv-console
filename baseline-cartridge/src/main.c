@@ -13,7 +13,7 @@ void simple_medium_sprite(int16_t x, int16_t y, int16_t z);
 
 // }
 // volatile int global = 42;
-
+MutexId mid;
 
 void thread1(void *){
     while (1)
@@ -23,11 +23,11 @@ void thread1(void *){
         /* code */
         // switch
         // thread_yield()
-        // lock(mid);
+        lock(mid);
         // simple_medium_sprite_green(0,0,0);
         VIDEO_MEMORY[pos1]='A';
         VIDEO_MEMORY[pos2]=' ';
-        // unlock(mid);
+        unlock(mid);
         // thread_yield();
     }
     // explict
@@ -39,11 +39,11 @@ void thread2(void *){
     {
         /* code */
         // thread_yield();
-        // lock(mid);
+        lock(mid);
         VIDEO_MEMORY[pos2]='B';
         VIDEO_MEMORY[pos1]=' ';
         // simple_medium_sprite_red(0,0,0);
-        // unlock(mid);
+        unlock(mid);
         // thread_yield();
     }
     thread_exit();
@@ -65,8 +65,8 @@ void video_test(){
 }
 
 void thread_test(){
-    ThreadID t1=thread_create(thread1,NULL,THREAD_MEMORY,High);
-    ThreadID t2=thread_create(thread2,NULL,THREAD_MEMORY,High);
+    ThreadID t1=thread_create_gp(thread1,NULL,THREAD_MEMORY,High);
+    ThreadID t2=thread_create_gp(thread2,NULL,THREAD_MEMORY,High);
     // startFirstThread(sched);
     uint32_t* global_gp=get_gp();
 }
@@ -83,11 +83,11 @@ int main() {
 
     *MODE_REGISTER=0;
     VIDEO_MEMORY[2]='H';
-    MutexId mid=initLock();
+    mid=initLock();
     // gp?
     // memory_test();
-    // thread_test();
-    video_test();
+    thread_test();
+    // video_test();
 
     VIDEO_MEMORY[x_pos]='X';
     while (1) {

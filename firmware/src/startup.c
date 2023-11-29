@@ -148,13 +148,13 @@ uint32_t c_system_call(uint32_t a0,uint32_t a1,uint32_t a2,uint32_t a3, uint32_t
         // ThreadInit
         if(current_thread_num<=10){
             ThreadPointers[current_thread_num]= ContextInitialize((TStackRef)(ThreadStack[current_thread_num - 1] + 2048), 
-            (TContextEntry)a0, (void *)a1);
+            (TContextEntry)a0, (void *)a1,(uint32_t)a2);
             current_thread_num++;
         }
     }else if(call==6){
         // thread_create
         if(current_thread_num<=MAX_THREAD_NUM){
-            return threadCreate((TContextEntry)a0,(void *)a1,(uint32_t)a2,(ThreadPriority)a3);
+            return threadCreate((TContextEntry)a0,(void *)a1,(uint32_t)a2,(ThreadPriority)a3,(uint32_t)a4);
         }
     }else if(call==7){
         // thread_yield
