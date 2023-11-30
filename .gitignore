@@ -39,3 +39,6 @@ bin/
 
 # Allow untracked workspace
 workspace/
+
+# mac
+.DS_Store

@@ -44,7 +44,7 @@ TStatus OSinitialize(uint32_t *gp){
 }
 
 
-ThreadID threadCreate(TContextEntry entry,void *param,uint32_t memsize,ThreadPriority prio){
+ThreadID threadCreate(TContextEntry entry,void *param,uint32_t memsize,ThreadPriority prio,uint32_t gp){
     if(entry==NULL){
         return INVALD_THREAD_ID;
     }else{
@@ -66,7 +66,7 @@ ThreadID threadCreate(TContextEntry entry,void *param,uint32_t memsize,ThreadPri
             new_thread->sp=
             ContextInitialize(
                 (TStackRef)(ThreadStack[global_tid] + memsize),
-                (TContextEntry)entry,(void *)param);
+                (TContextEntry)entry,(void *)param,(uint32_t)gp);
             threadArray[global_tid]=new_thread;
             // new_thread->sp=ThreadPointers[global_tid];
             current_thread_num++;

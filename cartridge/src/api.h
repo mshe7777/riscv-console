@@ -22,8 +22,8 @@ typedef enum{
     FINISHED
 }ThreadStatus;
 
-void set_gp(uint32_t* gp);
-uint32_t* get_gp(void);
+void set_gp(uint32_t gp);
+uint32_t get_gp(void);
 
 
 // 
@@ -33,7 +33,8 @@ uint32_t getCmdInterrupted();
 uint32_t getVideoInterrupted();
 
 // system calls thread
-ThreadID thread_create(TContextEntry entry, void* param, uint32_t  memsize,ThreadPriority prio);
+ThreadID thread_create(TContextEntry entry, void* param, uint32_t  memsize,ThreadPriority prio,uint32_t gp);
+ThreadID thread_create_gp(TContextEntry entry,void* param,uint32_t memsize,ThreadPriority prio);
 TStatus thread_yield(ThreadID tid);
 // exit current thread
 TStatus thread_exit();
