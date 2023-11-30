@@ -159,7 +159,7 @@ void initVideoSetting()
     *MODE_REGISTER = 0x01;
     // initialize background
     setBackGround(1, background_img);
-    setBackGroundControl(1, 1, 90, 90, 0, 1);
+    setBackGroundControl(1, 1, 0, 0, 0, 1);
     initBackGroundPalettes(1, color_palette);
 
     // initialize frog
