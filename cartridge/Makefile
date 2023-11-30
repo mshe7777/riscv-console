@@ -38,6 +38,7 @@ TARGET_OBJS =   $(OBJ_DIR)/main.o               \
                 $(OBJ_DIR)/crt0.o               \
                 $(OBJ_DIR)/startup.o			\
                 $(OBJ_DIR)/api.o			\
+				$(OBJ_DIR)/img_data.o			\
 
 
 all: directories $(BIN_DIR)/$(TARGET_NAME)
