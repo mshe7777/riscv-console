@@ -9,6 +9,8 @@
 #include "include/mutex.h"
 
 
+
+
 // thread_test
 // volatile int global = 42;
 // volatile int pos1=0x40*1;
@@ -57,6 +59,7 @@
 //     strcpy((char *)(VIDEO_MEMORY),Buffer);
 
 // }
+// // void 
 
 // int main(){
 //     OSinitialize(get_gp());
@@ -76,18 +79,27 @@
 //     // thread_yield(t2);
 
 
+
 //     char *Buffer2 = malloc(32);
 //     strcpy(Buffer2,"Thread test1 finished");
 //     strcpy((char *)(VIDEO_MEMORY+0x40*5),Buffer2);
 //     while(1){
 
-//     } 
+//     }
+    
 // }
 
 
 
 // cart test
+// volatile uint32_t controller_status = 0;
 volatile int global = 42;
+
+// int pthread_mutex_lock(pthread_mutex_t *mutex);
+// int pthread_mutex_unlock(pthread_mutex_t *mutex);
+// to here
+// threadCreate()
+
 //cartridge setup
 volatile uint32_t *CartridgeStatus = (volatile uint32_t *)(0x4000001C);
 typedef void (*FunctionPtr)(void);
