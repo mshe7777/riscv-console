@@ -10,15 +10,20 @@
 
 typedef struct scheduler
 {
-    /* data */
+    ThreadID current_tid;
     ThreadID next_tid;
+    /* data */
     Queue* ready;
     // PriorityQueue* ready;
     Queue* finished;
-    ThreadID current_tid;
     Queue* waiter;
+
 }scheduler;
 extern struct scheduler* sched;
+
+
+// first run
+extern int first_flag;
 
 
 TStatus initScheduler(struct scheduler* schedule);

@@ -66,11 +66,14 @@ int main() {
       wood3_x += wood3_dir * 10;
 
       // position reset over screen
-      if ((wood1_dir == -1 && wood1_x - 32 <= 0) || (wood1_dir == 1 && wood1_x + 64 >= 512))
+      if ((wood1_dir == -1 && wood1_x - 32 <= 0) ||
+          (wood1_dir == 1 && wood1_x + 64 >= 512))
         wood1_dir *= -1;
-      if ((wood2_dir == -1 && wood2_x - 32 <= 0) || (wood2_dir == 1 && wood2_x + 64 >= 512))
+      if ((wood2_dir == -1 && wood2_x - 32 <= 0) ||
+          (wood2_dir == 1 && wood2_x + 64 >= 512))
         wood2_dir *= -1;
-      if ((wood3_dir == -1 && wood3_x - 32 <= 0) || (wood3_dir == 1 && wood3_x + 64 >= 512))
+      if ((wood3_dir == -1 && wood3_x - 32 <= 0) ||
+          (wood3_dir == 1 && wood3_x + 64 >= 512))
         wood3_dir *= -1;
 
       // moving
@@ -179,9 +182,10 @@ void initVideoSetting() {
   initBackGroundPalettes(1, color_palette);
 
   // initialize frog
-  initSpritesPalettes(1, color_palette, Medium);  // palette index 1
-  setSprite(1, frog_img, Medium);                 // sprite index 1 for frog
-  setSpriteControl(1, 1, 240, 256, 2, 1, Medium); // control index 1 for frog, z=2
+  initSpritesPalettes(1, color_palette, Medium); // palette index 1
+  setSprite(1, frog_img, Medium);                // sprite index 1 for frog
+  setSpriteControl(1, 1, 240, 256, 2, 1,
+                   Medium); // control index 1 for frog, z=2
 
   // initialize wood
   // first set 2,3,4

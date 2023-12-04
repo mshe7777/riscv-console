@@ -45,7 +45,9 @@ TARGET_OBJS =   $(OBJ_DIR)/main.o               \
 				$(OBJ_DIR)/mutex.o				\
 				$(OBJ_DIR)/scheduler.o			\
 				$(OBJ_DIR)/queue.o				\
-				$(OBJ_DIR)/pqueue.o
+				$(OBJ_DIR)/condition.o			\
+				$(OBJ_DIR)/pqueue.o				\
+				$(OBJ_DIR)/sleepTimer.o
 
 				
 
