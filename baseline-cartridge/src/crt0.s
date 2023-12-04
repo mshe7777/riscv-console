@@ -30,13 +30,13 @@ _start:
     add     s0, sp, zero
     jal     ra, init
     nop
-    mv      a0, gp
-    jal     ra, initialize
-    nop
+    # mv      a0, gp
+    # jal     ra, initialize
+    # nop
     jal     ra, main
-    lw      ra,0(sp)
-    addi	sp, sp, 4
-    ret
+    # lw      ra,0(sp)
+    # addi	sp, sp, 4
+    # ret
     .cfi_endproc
 
 
@@ -47,6 +47,9 @@ _start:
 .global Malloc, Free, Memcpy
 .global lock, unlock, initLock,destoryLock
 .global set_gp, get_gp
+.global createCond,destoryCond,condWait,condNotifyOne,condNotifyAll
+.global sleep
+.global thread_join
 
 set_gp:
     mv gp,a0
@@ -54,8 +57,6 @@ set_gp:
 get_gp:
     mv a0,gp
     ret
-
-
 
 initialize:
     li a5,0
@@ -121,5 +122,33 @@ initLock:
     ecall
 
 destoryLock:
-    li a4,15
+    li a5,15
+    ecall
+
+createCond:
+    li a5,16
+    ecall
+
+destoryCond:
+    li a5,17
+    ecall
+
+condWait:
+    li a5,18
+    ecall
+
+condSignal:
+    li a5,19
+    ecall
+
+condBroadcast:
+    li a5,20
+    ecall
+
+sleep:
+    li a5,21
+    ecall
+
+thread_join:
+    li a5,22
     ecall

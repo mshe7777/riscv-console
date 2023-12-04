@@ -2,6 +2,8 @@
 #define THREAD_H
 #define MAX_THREAD_NUM 10
 #include "kernel.h"
+// #include "mutex.h"
+// #include "condition.h"
 // also include the defination of schedule
 
 // thread def
@@ -41,13 +43,14 @@ typedef struct TCB
     uint32_t memory_size;
     TContextEntry entry;
     void* param;
-    int ticks;
+    size_t ticks;
     ThreadID wait_id;
     ThreadReturn ret_val;
     uint8_t *stack_base;// return value of malloc;
     const char* buffer;
     uint32_t write_size;
-
+    MutexId mid;
+    CondID cond_id;
 }TCB;
 
 
@@ -82,6 +85,7 @@ TStatus threadWait(ThreadID tid,ThreadReturn* retvalref,Tick timeout );
 ThreadID threadId();// get current tid
 ThreadStatus threadState(ThreadID tid); //  get the thread's status
 TStatus threadSleep(Tick tick); // unknow?
+void threadJoin(ThreadID tid);
 
 
 
@@ -90,6 +94,8 @@ ThreadID thread_create(TContextEntry entry, void* param, uint32_t  memsize,Threa
 TStatus thread_yield();
 // exit current thread
 TStatus thread_exit();
+void thread_join(ThreadID tid);
+
 
 
 

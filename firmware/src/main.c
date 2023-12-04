@@ -91,8 +91,8 @@
 
 
 
-// cart test
-// volatile uint32_t controller_status = 0;
+// // cart test
+// // volatile uint32_t controller_status = 0;
 volatile int global = 42;
 
 // int pthread_mutex_lock(pthread_mutex_t *mutex);
