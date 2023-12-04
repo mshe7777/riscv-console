@@ -104,7 +104,7 @@ void setBackGroundControl(uint8_t ctrl_idx, uint8_t data_idx,uint16_t x,uint16_t
     x=(x+512)& 0x3FF;
     z=(z+0)& 0x7;
     palette=palette&0x3;
-    uint32_t value=(data_idx<<29)|(z<<22)|(y<12)|(x<<2)|palette;
+    uint32_t value=(data_idx<<29)|(z<<22)|(y<<12)|(x<<2)|palette;
     BACKGROUND_CONTROL[ctrl_idx]=value;
 }
 
