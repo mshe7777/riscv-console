@@ -189,7 +189,7 @@ void set_timer(uint64_t timestamp)
 void handle_time_interrupt()
 {
 
-    set_timer(1000);
+    set_timer(50);
 
 
     if (current_thread_num >= 2)

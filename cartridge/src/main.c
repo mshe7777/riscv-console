@@ -63,9 +63,9 @@ int main() {
   frog.step = 0;
   frog.mtx = initLock();
 
-  ThreadID t1 = thread_create_gp(woodMoveThread, &frog, THREAD_MEMORY, High);
-  ThreadID t2 = thread_create_gp(frogMoveThread, &frog, THREAD_MEMORY, High);
-  ThreadID t3 = thread_create_gp(checkGameOverThread, &frog, THREAD_MEMORY, High);
+  t1 = thread_create_gp(woodMoveThread, &frog, THREAD_MEMORY, High);
+  t2 = thread_create_gp(frogMoveThread, &frog, THREAD_MEMORY, High);
+  t3 = thread_create_gp(checkGameOverThread, &frog, THREAD_MEMORY, High);
 
   return 0;
 }
@@ -156,7 +156,8 @@ void showGameOver() {
 void woodMoveThread(void *param) {
   struct position *frog = (struct position *)param;
 
-  int last_global = 42;
+  int counter = 0;
+  int last_counter = 0;
   woods[0].x = 208;
   woods[1].x = 208 + 80;
   woods[2].x = 208 - 40;
@@ -165,8 +166,8 @@ void woodMoveThread(void *param) {
   woods[2].dir = -1;
 
   while (status == RUN) {
-    global = getTicks();
-    if (global != last_global) {
+    counter = getTicks();
+    if (counter - last_counter >= 1) {  //set frequency here
       // wood move speed
       woods[0].x += woods[0].dir * 5;
       woods[1].x += woods[1].dir * 7;
@@ -214,19 +215,18 @@ void woodMoveThread(void *param) {
       }
       setSpriteControl(1, 1, frog->x, frog->y, 2, 1, Medium);
 
-      last_global = global;
+      last_counter = counter;
     }
-    thread_exit();
   }
 }
 
 void frogMoveThread(void *param) {
   struct position *frog = (struct position *)param;
-  int global2 = 0;
-  int last_global2 = 0;
+  int counter2 = 0;
+  int last_counter2 = 0;
   while (status == RUN) {
-    global2 = getTicks();
-    if (global2 - last_global2 >= 1) {
+    counter2 = getTicks();
+    if (counter2 - last_counter2 >= 1) {  //set frequency here
       controller_status = getButtonStatus();
       if (controller_status) {
         if (controller_status & 0x1) {
@@ -236,6 +236,7 @@ void frogMoveThread(void *param) {
         }
 
         if (controller_status & 0x2) {
+          if (counter2 - last_counter2 < 5) continue;
           lock(frog->mtx);
           frog->y -= 64;
           frog->step++;
@@ -243,6 +244,7 @@ void frogMoveThread(void *param) {
         }
 
         if (controller_status & 0x4) {
+          if (frog->step == 0 || counter2 - last_counter2 < 5) continue;
           lock(frog->mtx);
           frog->y += 64;
           frog->step--;
@@ -256,10 +258,8 @@ void frogMoveThread(void *param) {
         }
       }
       setSpriteControl(1, 1, frog->x, frog->y, 2, 1, Medium);
-      last_global2 = global2;
+      last_counter2 = counter2;
     }
-
-    thread_exit();
   }
 }
 
@@ -271,12 +271,12 @@ void checkGameOverThread(void *param) {
     }
 
     if (frog->step == 3) {
-      if (abs(frog->x - woods[0].x) >= 64)
+      if (abs(frog->x - woods[2].x) >= 64)
         status = LOSE;
     }
 
     if (frog->step == 2) {
-      if (abs(frog->x - woods[0].x) >= 64)
+      if (abs(frog->x - woods[1].x) >= 64)
         status = LOSE;
     }
 
@@ -284,7 +284,7 @@ void checkGameOverThread(void *param) {
       if (abs(frog->x - woods[0].x) >= 64)
         status = LOSE;
     }
+
   }
   showGameOver();
-  thread_exit();
 }
