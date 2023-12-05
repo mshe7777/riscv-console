@@ -177,13 +177,13 @@ void woodMoveThread(void *param) {
 
       if (woods[0].x + 64 >= 512) woods[0].dir = -1;
 
-      if (woods[1].x - 32 <= 0) woods[0].dir = 1;
+      if (woods[1].x - 32 <= 0) woods[1].dir = 1;
 
-      if (woods[1].x + 64 >= 512) woods[0].dir = -1;
+      if (woods[1].x + 64 >= 512) woods[1].dir = -1;
 
-      if (woods[2].x - 32 <= 0) woods[0].dir = 1;
+      if (woods[2].x - 32 <= 0) woods[2].dir = 1;
 
-      if (woods[2].x + 64 >= 512) woods[0].dir = -1;
+      if (woods[2].x + 64 >= 512) woods[2].dir = -1;
 
       // moving
       setSpriteControl(2, 2, woods[0].x - 32, wood1_y, 1, 1, Medium);
@@ -226,7 +226,7 @@ void frogMoveThread(void *param) {
   int last_global2 = 0;
   while (status == RUN) {
     global2 = getTicks();
-    if (global2 - last_global2 >= 0) {
+    if (global2 - last_global2 >= 1) {
       controller_status = getButtonStatus();
       if (controller_status) {
         if (controller_status & 0x1) {
@@ -266,21 +266,21 @@ void frogMoveThread(void *param) {
 void checkGameOverThread(void *param) {
   struct position *frog = (struct position *)param;
   while (status == RUN) {
-    if (frog->step == 3) {
+    if (frog->step == 4) {
       status = WIN;
     }
 
-    if (frog->step == 2) {
+    if (frog->step == 3) {
       if (abs(frog->x - woods[2].x - 16) >= 64)
         status = LOSE;
     }
 
-    if (frog->step == 1) {
+    if (frog->step == 2) {
       if (abs(frog->x - woods[1].x - 16) >= 64)
         status = LOSE;
     }
 
-    if (frog->step == 0) {
+    if (frog->step == 1) {
       if (abs(frog->x - woods[0].x - 16) >= 64)
         status = LOSE;
     }
