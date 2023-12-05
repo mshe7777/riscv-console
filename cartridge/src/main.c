@@ -156,7 +156,7 @@ void showGameOver() {
 void woodMoveThread(void *param) {
   struct position *frog = (struct position *)param;
 
-  int last_global = 0;
+  int last_global = 42;
   woods[0].x = 208;
   woods[1].x = 208 + 80;
   woods[2].x = 208 - 40;
@@ -271,17 +271,17 @@ void checkGameOverThread(void *param) {
     }
 
     if (frog->step == 3) {
-      if (abs(frog->x - woods[2].x - 16) >= 64)
+      if (abs(frog->x - woods[0].x) >= 64)
         status = LOSE;
     }
 
     if (frog->step == 2) {
-      if (abs(frog->x - woods[1].x - 16) >= 64)
+      if (abs(frog->x - woods[0].x) >= 64)
         status = LOSE;
     }
 
     if (frog->step == 1) {
-      if (abs(frog->x - woods[0].x - 16) >= 64)
+      if (abs(frog->x - woods[0].x) >= 64)
         status = LOSE;
     }
   }
