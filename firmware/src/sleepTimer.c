@@ -13,9 +13,13 @@ void doSleep(size_t cnt,scheduler* schedule,SleepTimer* sleeper){
     // mutexRelease(schedule,mutexArray[sleeper->mutex_id]);
     // 基于wait比较复杂 且原理有问题，使用一个比较简单粗糙的方法
     struct TCB* cur=threadArray[sched->current_tid];
-    cur->ticks=cnt;
-    enqueue(sleeper->waiter,cur->tid);
-    suspend(sched);
+    // if(cur->state==RUNNING){
+        cur->ticks=cnt;
+        enqueue(sleeper->waiter,cur->tid);
+        uint32_t mepc = csr_mepc_read();
+        suspend(sched);
+        csr_write_mepc(mepc);
+    // }
 }
 
 
@@ -23,7 +27,7 @@ void doSleep(size_t cnt,scheduler* schedule,SleepTimer* sleeper){
 void updateGlobalTicks(scheduler* sched,SleepTimer* sleeper){
     // notifyAll()
     // sleeper->systicks++;
-    // notifyAll_(schedule,sleeper->cond_id);
+    // notifyAll_(sched,sleeper->cond_id);
     if(!isEmpty(sleeper->waiter)){
     for(int i=0;i<sleeper->waiter->size;i++){
         ThreadID tid=dequeue(sleeper->waiter);

@@ -10,7 +10,7 @@
 typedef uint32_t TInterruptState, *TInterruptStateRef;
 typedef uint32_t *TStackRef;
 typedef uint32_t (*TContextEntry)(void *param);
-typedef uint32_t ThreadID; 
+typedef int ThreadID; 
 
 typedef uint32_t ThreadReturn;
 typedef uint32_t Tick;

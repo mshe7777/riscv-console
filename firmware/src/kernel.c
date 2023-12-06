@@ -145,11 +145,11 @@ TStatus threadWait(ThreadID tid, ThreadReturn *retvalref, Tick timeout)
 
 void threadJoin(ThreadID tid){
     struct TCB* cur=threadArray[tid];
-    mutexLock(sched, cur->mid);
+    mutexLock(sched, mutexArray[cur->mid]);
     while(threadState(tid)!=FINISHED){
-        condWait(cur->cond_id,cur->mid);
+        wait_(cur->mid,sched,cur->cond_id);
     }
-    mutexRelease(sched, cur->mid);
+    mutexRelease(sched, mutexArray[cur->mid]);
 }
 
 ThreadID threadId()

@@ -3,7 +3,7 @@
 #include<stdint.h>
 #include<stddef.h>
 
-typedef uint32_t ThreadID; 
+typedef int ThreadID; 
 typedef uint32_t TStatus;// total status
 typedef uint32_t (*TContextEntry)(void *param);
 typedef uint32_t MutexId;

@@ -83,7 +83,7 @@ void  c_interrupt_handler(int mcause,int mepc){
                 global = 0;
             }
             if(init_flag){
-                // updateGlobalTicks(sched,global_sleep_timer);
+                updateGlobalTicks(sched,global_sleep_timer);
             }
             // update the systick
             // updateAllTick();
@@ -222,6 +222,9 @@ uint32_t c_system_call(uint32_t a0,uint32_t a1,uint32_t a2,uint32_t a3, uint32_t
     }else if(call==21){
         // sleep
         doSleep((size_t)(a0),sched,global_sleep_timer);
+    }else if(call==22){
+        // join
+        threadJoin((ThreadID)(a0));
     }
 
 
