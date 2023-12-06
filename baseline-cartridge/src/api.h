@@ -26,7 +26,7 @@ void set_gp(uint32_t gp);
 uint32_t get_gp(void);
 
 
-// 
+// ticks and interrupts
 uint32_t getTicks();
 uint32_t getButtonStatus();
 uint32_t getCmdInterrupted();
@@ -41,7 +41,6 @@ TStatus thread_exit();
 TStatus threadInit(TContextEntry entry, void *param);
 
 // mutex
-
 void lock(MutexId mid);
 void unlock(MutexId mid);
 MutexId initLock();
@@ -55,11 +54,11 @@ TStatus condSignal(CondID cond_id);
 TStatus condBroadcast(CondID cond_id);
 
 
-// sleep
-void sleep(size_t ticks);
+// // sleep
+// void sleep(size_t ticks);
 
-// join
-void thread_join(ThreadID tid);
+// // join
+// void thread_join(ThreadID tid);
 
 // memory
 void kmemcpy(uint8_t* dst, uint8_t* src, size_t num) ;
@@ -68,7 +67,6 @@ void Free(void* ptr);
 void *Malloc(size_t size);
 // struct scheduler* sched;
 
-// void startFirstThread(scheduler* schedule);
 // init
 void initialize(uint32_t* gp);
 
@@ -165,10 +163,7 @@ enum Sprites{
 typedef enum Sprites Sprite;
 
 
-
 // void setVideoModel(int cmd);
-
-
 int setBackGround(uint8_t idx,char* addr);
 int setSprite(uint8_t idx, uint8_t *addr, Sprite sprites) ;
 int initBackGroundPalettes(uint8_t idx,uint8_t* addr);
@@ -200,8 +195,6 @@ void setSmallSprite(uint8_t spriteIndex, uint8_t* spriteData,
                     uint8_t paletteIndex, uint32_t* paletteData);
 
 // void simple_medium_sprite(int16_t x, int16_t y, int16_t z);
-
-
 void simple_medium_sprite_red(int16_t x, int16_t y, int16_t z) ;
 void simple_medium_sprite_green(int16_t x, int16_t y, int16_t z) ;
 
