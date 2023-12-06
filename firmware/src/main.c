@@ -107,7 +107,7 @@ typedef void (*FunctionPtr)(void);
 
 int main(){
     // simple_medium_sprite(0,0,0);
-    VIDEO_MEMORY[0]='A';
+    //VIDEO_MEMORY[0]='A';
 
     //loading cartridge
     while (1){
