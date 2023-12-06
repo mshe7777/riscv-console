@@ -16,15 +16,8 @@ typedef void (*FunctionPtr)(void);
 
 
 int main(){
-    VIDEO_MEMORY[0]='O';
-    VIDEO_MEMORY[1]='S';
-    VIDEO_MEMORY[2]=' ';
-    VIDEO_MEMORY[3]='S';
-    VIDEO_MEMORY[4]='T';
-    VIDEO_MEMORY[5]='A';
-    VIDEO_MEMORY[6]='R';
-    VIDEO_MEMORY[7]='T';
-    VIDEO_MEMORY[8]='!';
+    char *source = "Wellcome to Group4 OS! Now the OS has started, you can insert your cartridge :)";
+    kmemcpy((char *)VIDEO_MEMORY, source, 80); 
 
     //loading cartridge
     while (1){

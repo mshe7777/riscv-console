@@ -61,8 +61,8 @@ TStatus condBroadcast(CondID cond_id);
 // void thread_join(ThreadID tid);
 
 // memory
-void kmemcpy(uint8_t* dst, uint8_t* src, size_t num) ;
-void* Memcpy(uint8_t* dst,uint8_t* src,size_t num);
+void kmemcpy(uint8_t* dst, uint8_t* src, size_t num);
+void* Memcpy(uint8_t* dst, uint8_t* src, size_t num);
 void Free(void* ptr);
 void *Malloc(size_t size);
 // struct scheduler* sched;
