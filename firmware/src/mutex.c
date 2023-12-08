@@ -8,7 +8,8 @@ MutexId global_mutex_id=0;
 
 MutexId mutexCreate(){
     Mutex* m=(Mutex*)malloc(sizeof(Mutex));
-    m->waiting_list=createQueue(MAX_MUTEX_NUM);
+    m->waiting_list=(Queue*)malloc(sizeof(Queue));
+    createQueue(m->waiting_list,MAX_MUTEX_NUM);
     m->owner=INVALD_MUTEX_OWNER;
     mutexArray[global_mutex_id]=m;
     return global_mutex_id++;

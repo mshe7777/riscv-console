@@ -19,37 +19,24 @@ DEBUG_MODE=TRUE
 ifdef DEBUG_MODE
 DEFINES  += -DDEBUG
 CFLAGS   += -O0 -g -ggdb
-# LDFLAGS  += -Wl,-no_pie
+#LDFLAGS  += -Wl,-no_pie
 else 
 CFLAGS   += -O3
 endif
 
 LDFILE   = riscv32-console.ld
 INCLUDE  += -I $(INC_DIR)
-# CFLAGS   += -ffreestanding  -nostartfiles -nostdlib -nodefaultlibs
-CFLAGS   += -ffreestanding  -nostartfiles 
-# LDFLAGS  += -lc -lnosys -lstdc++
+CFLAGS   += -ffreestanding  -nostartfiles -nostdlib -nodefaultlibs
+LDFLAGS  +=
 LDFLAGS  += -Wl,--gc-sections -Wl,-T,$(LDFILE)
 
-TARGET_NAME = riscv-console-firmware
+TARGET_NAME = cartridge_API
 
 TARGET_OBJS =   $(OBJ_DIR)/main.o               \
                 $(OBJ_DIR)/crt0.o               \
                 $(OBJ_DIR)/interrupt.o          \
-                $(OBJ_DIR)/startup.o  			\
-				$(OBJ_DIR)/syscall.o			\
-				$(OBJ_DIR)/kernel.o				\
-				$(OBJ_DIR)/video.o				\
-				$(OBJ_DIR)/memory.o				\
-				$(OBJ_DIR)/thread.o				\
-				$(OBJ_DIR)/mutex.o				\
-				$(OBJ_DIR)/scheduler.o			\
-				$(OBJ_DIR)/queue.o				\
-				$(OBJ_DIR)/condition.o			\
-				$(OBJ_DIR)/pqueue.o				\
-				$(OBJ_DIR)/sleepTimer.o
-
-				
+				$(OBJ_DIR)/sysCallsStub.o		\
+                $(OBJ_DIR)/startup.o			
 
 all: directories $(BIN_DIR)/$(TARGET_NAME)
 

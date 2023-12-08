@@ -9,7 +9,7 @@ typedef struct {
     int size;
 } Queue;
 
-Queue* createQueue(int capacity);
+void createQueue(Queue* q,int  capacity);
 int isEmpty(Queue *q);
 int isFull(Queue *q);
 void enqueue(Queue *q, int value);

@@ -9,12 +9,7 @@ _start:
     .option pop
     la sp, __stack_top
     add s0, sp, zero
-    la  a5, _interrupt_handler
-    csrw mtvec, a5
     jal ra, init
-    nop
-    mv      a0, gp
-    jal     ra, initialize
     nop
     jal zero, main
     .cfi_endproc

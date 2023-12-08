@@ -3,11 +3,11 @@
 #include<stdint.h>
 #include<stddef.h>
 
-typedef uint32_t ThreadID; 
+typedef int ThreadID; 
 typedef uint32_t TStatus;// total status
 typedef uint32_t (*TContextEntry)(void *param);
 typedef uint32_t MutexId;
-typedef uint32_t CondId;
+typedef uint32_t CondID;
 
 typedef enum{
     High=0,
@@ -46,6 +46,20 @@ void lock(MutexId mid);
 void unlock(MutexId mid);
 MutexId initLock();
 TStatus destroyLock(MutexId mid);
+
+// cond
+CondID createCond();
+TStatus destoryCond(CondID cond_id);
+TStatus condWait(CondID cond_id,MutexId mutex_id);
+TStatus condSignal(CondID cond_id);
+TStatus condBroadcast(CondID cond_id);
+
+
+// sleep
+void sleep(size_t ticks);
+
+// join
+void thread_join(ThreadID tid);
 
 // memory
 void kmemcpy(uint8_t* dst, uint8_t* src, size_t num) ;

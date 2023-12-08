@@ -1,19 +1,37 @@
 #include "include/scheduler.h"
 #include "include/thread.h"
+#include <stdlib.h>
 
 
-TStatus initScheduler(scheduler* schedule){
-    schedule->ready=createQueue(MAX_QUEUE_NUM);
-    schedule->finished=createQueue(MAX_QUEUE_NUM);
-    schedule->waiter=createQueue(MAX_QUEUE_NUM);
-    schedule->current_tid=0;// main?
-    schedule->next_tid=0;
+first_flag=1;
+
+TStatus initScheduler(scheduler* sch){
+
+
+
+    // 初始化其他成员
+    sch->current_tid = 0;      
+    sch->next_tid = 0;
+
+    // 初始化 ready 队列
+    sch->ready = (Queue *)malloc(sizeof(Queue));
+    createQueue(sch->ready, MAX_QUEUE_NUM);
+
+    // 初始化 finished 队列
+    sch->finished = (Queue *)malloc(sizeof(Queue));
+    createQueue(sch->finished, MAX_QUEUE_NUM);
+
+    // 初始化 waiter 队列
+    sch->waiter = (Queue *)malloc(sizeof(Queue));
+    createQueue(sch->waiter, MAX_QUEUE_NUM);
 
 };
 
 void interruptSwicth(scheduler* schedule){
     // switchThreadStateTo(schedule,READY);
     // ?
+
+    // first time current=0
     if(isEmpty(schedule->ready)) return;
 
     ThreadID curr_tid=schedule->current_tid;
@@ -21,10 +39,15 @@ void interruptSwicth(scheduler* schedule){
 
     threadArray[curr_tid]->state=READY;
     threadArray[next_tid]->state=RUNNING;
-    enqueue(schedule->ready,curr_tid);
-
+    if(!first_flag){
+        enqueue(schedule->ready,curr_tid);
+    }
+    first_flag=0;
+    
     schedule->current_tid=next_tid;
-    ContextSwitch(&threadArray[curr_tid]->sp,threadArray[next_tid]->sp);
+    // if(curr_tid!=next_tid){
+        ContextSwitch(&threadArray[curr_tid]->sp,threadArray[next_tid]->sp);
+    // }
 }
 
 void yield(scheduler* schedule){
@@ -39,6 +62,7 @@ void resume(scheduler* schedule, ThreadID tid){
     
     threadArray[tid]->state=READY;
     enqueue(schedule->ready,tid);
+    // interruptSwicth(schedule);
 }
 void kexit(scheduler* schedule){
     switchThreadStateTo(schedule,FINISHED);
@@ -71,9 +95,12 @@ void switchThreadStateTo(scheduler* schedule,const ThreadStatus new_state){
     }else if(new_state==FINISHED){
         enqueue(schedule->finished,curr_tid);
     }
+
     DisableInterrupts();
     schedule->current_tid=next_tid;
-    ContextSwitch(threadArray[curr_tid]->sp,threadArray[next_tid]->sp);
+    ContextSwitch(&threadArray[curr_tid]->sp,threadArray[next_tid]->sp);
     EnableInterrupts();
 }
+
+
 

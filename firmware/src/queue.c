@@ -2,13 +2,12 @@
 #include "include/memory.h"
 #include <stdlib.h>
 
-Queue* createQueue(int capacity) {
-    Queue *q = (Queue*)malloc(sizeof(Queue));
+void createQueue(Queue* q,int capacity) {
     q->array = (int*)malloc(sizeof(int) * capacity);
     q->capacity = capacity;
     q->front = q->rear = -1;
     q->size = 0;
-    return q;
+    // return q;
 }
 
 int isEmpty(Queue *q) {

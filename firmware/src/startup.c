@@ -4,6 +4,8 @@
 #include "include/thread.h"
 #include "include/memory.h"
 #include "include/mutex.h"
+#include "include/condition.h"
+#include "include/sleepTimer.h"
 
 
 
@@ -25,6 +27,7 @@ extern volatile uint32_t *INTER_ENABLE;
 
 volatile int vip_seq=1;
 volatile int cmd_seq=1;
+uint32_t init_flag=0;
 
 // Nuber of sprites: 0~127: small sprite; 128~191: large sprite
 int small_sprite_count = 0; // max: 128 small sprites
@@ -78,6 +81,9 @@ void  c_interrupt_handler(int mcause,int mepc){
             if (global == 9999)
             {
                 global = 0;
+            }
+            if(init_flag){
+                updateGlobalTicks(sched,global_sleep_timer);
             }
             // update the systick
             // updateAllTick();
@@ -187,12 +193,40 @@ uint32_t c_system_call(uint32_t a0,uint32_t a1,uint32_t a2,uint32_t a3, uint32_t
         // destoryLock
         // if(mutexArray[])
         if(mutexArray[(MutexId)a0]!=NULL){
+            mutexArray[(MutexId)a0]=NULL;
             ret=STATUS_SUCCESS;
         }else{
             ret=STATUS_FAILURE;
         }
         mutexArray[(MutexId)a0]=NULL;
+    }else if(call==16){
+        // createCond
+        ret=condCreate();
+    }else if(call==17){
+        // destoryCond
+        if(condArray[(CondID)a0]!=NULL){
+            condArray[(CondID)a0]=NULL;
+            ret=STATUS_SUCCESS;
+        }else{
+            ret=STATUS_FAILURE;
+        }
+    }else if(call==18){
+        // condWait
+        wait_((MutexId)(a0),sched,(CondId)(a1));
+    }else if(call==19){
+        //condSignal
+        notifyOne(sched,condArray[(CondID)(a0)]);
+    }else if(call==20){
+        // condBroadcast
+        notifyAll(sched,condArray[(CondID)(a0)]);
+    }else if(call==21){
+        // sleep
+        doSleep((size_t)(a0),sched,global_sleep_timer);
+    }else if(call==22){
+        // join
+        threadJoin((ThreadID)(a0));
     }
+
 
 
     return ret;
