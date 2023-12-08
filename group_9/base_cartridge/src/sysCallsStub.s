@@ -1,6 +1,6 @@
 .section .text, "ax"
 .global GetTicks, GetController
-.global initSprite, moveSprites, initSprites, removeSprite, moveSprite
+.global initSprite, moveSprites, initSprites, removeSprite, moveSprite, backgroundInit
 .global delay, setModeRegister, print, clear
 .global threadInitialize
 .global setCallbackHandler
@@ -40,4 +40,7 @@ threadInitialize:
     ecall
 setCallbackHandler:
     li      a5, 0x0000000C
+    ecall
+backgroundInit:
+    li      a5, 0x0000000D
     ecall
