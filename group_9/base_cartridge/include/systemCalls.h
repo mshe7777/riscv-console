@@ -18,6 +18,6 @@ uint32_t delay(int);
 uint32_t setModeRegister(int);
 
 typedef void (*FunctionPtr)(void);
-void setCallbackHandler(char, FunctionPtr);
+void setCallbackHandler(char, FunctionPtr, void *alist);
 
 #endif

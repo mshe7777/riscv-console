@@ -13,6 +13,7 @@ typedef struct {
     int z;
 } coordinate;
 
+
 typedef struct {
     SpriteTYPE type;
     coordinate position;
@@ -45,5 +46,6 @@ uint32_t moveSprite(Sprite *spirite);
 uint32_t initSprite(Sprite *spirite);
 uint32_t removeSprite(Sprite *spirite);
 uint32_t backgroundInit(Background *background);
+
 
 #endif
