@@ -127,13 +127,15 @@ int main() {
         if (controller_status & 0x2) {
           frog.y -= 64;
           frog.step++;
-          gap = 100000;
+          gap = 120000;
         }
 
         if (controller_status & 0x4) {
+          if (frog.step == 0)
+            continue;
           frog.y += 64;
           frog.step--;
-          gap = 100000;
+          gap = 120000;
         }
 
         if (controller_status & 0x8) {
