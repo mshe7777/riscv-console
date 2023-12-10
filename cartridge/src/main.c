@@ -211,14 +211,17 @@ void woodMoveThread(void *param) {
       if (frog->step == 3) {
         lock(frog->mtx);
         frog->x += woods[2].dir * 10;
+        frog->x = frog->x < 0 ? 0 : frog->x;
         unlock(frog->mtx);
       } else if (frog->step == 2) {
         lock(frog->mtx);
         frog->x += woods[1].dir * 7;
+        frog->x = frog->x < 7 ? 7 : frog->x;
         unlock(frog->mtx);
       } else if (frog->step == 1) {
         lock(frog->mtx);
         frog->x += woods[0].dir * 5;
+        frog->x = frog->x < 0 ? 0 : frog->x;
         unlock(frog->mtx);
       }
       setSpriteControl(1, 1, frog->x, frog->y, 2, 1, Medium);
@@ -251,7 +254,7 @@ void frogMoveThread(void *param) {
           frog->y -= 64;
           frog->step++;
           unlock(frog->mtx);
-          gap = 10;
+          gap = 30;
         }
 
         if (controller_status & 0x4) {
@@ -261,7 +264,7 @@ void frogMoveThread(void *param) {
           frog->y += 64;
           frog->step--;
           unlock(frog->mtx);
-          gap = 10;
+          gap = 30;
         }
 
         if (controller_status & 0x8) {
