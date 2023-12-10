@@ -169,29 +169,30 @@ void woodMoveThread(void *param) {
   while (status == RUN) {
     counter = getTicks();
     if (counter - last_counter >= 1) { // set frequency here
-      // wood move speed
-      woods[0].x += woods[0].dir * 5;
-      woods[1].x += woods[1].dir * 7;
-      woods[2].x += woods[2].dir * 10;
 
       // position reset over screen
-      if (woods[0].x - 32 <= 0)
+      if (woods[0].x - 32 - 5 <= 0)
         woods[0].dir = 1;
 
       if (woods[0].x + 64 >= 512)
         woods[0].dir = -1;
 
-      if (woods[1].x - 32 <= 0)
+      if (woods[1].x - 32 - 7 <= 0)
         woods[1].dir = 1;
 
       if (woods[1].x + 64 >= 512)
         woods[1].dir = -1;
 
-      if (woods[2].x - 32 <= 0)
+      if (woods[2].x - 32 - 10 <= 0)
         woods[2].dir = 1;
 
       if (woods[2].x + 64 >= 512)
         woods[2].dir = -1;
+
+      // wood move speed
+      woods[0].x += woods[0].dir * 5;
+      woods[1].x += woods[1].dir * 7;
+      woods[2].x += woods[2].dir * 10;
 
       // moving
       setSpriteControl(2, 2, woods[0].x - 32, wood1_y, 1, 1, Medium);
