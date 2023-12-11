@@ -232,13 +232,171 @@ void initVideoSetting() {
 }
 
 void showGameOver() {
-  switchToTextMode();
+
+  if (status == WIN) {
+    // W
+    drawRectangleWithSmallSprite(
+        36 + 1, generateSmallSpriteConfig(160 + 16 * 0, 100 + 16 * 0, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        36 + 2, generateSmallSpriteConfig(160 + 16 * 0, 100 + 16 * 1, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        36 + 3, generateSmallSpriteConfig(160 + 16 * 0, 100 + 16 * 2, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        36 + 4, generateSmallSpriteConfig(160 + 16 * 0, 100 + 16 * 3, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        36 + 5, generateSmallSpriteConfig(160 + 16 * 1, 100 + 16 * 4, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        36 + 6, generateSmallSpriteConfig(160 + 16 * 2, 100 + 16 * 3, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        36 + 7, generateSmallSpriteConfig(160 + 16 * 3, 100 + 16 * 4, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        36 + 8, generateSmallSpriteConfig(160 + 16 * 4, 100 + 16 * 3, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        36 + 9, generateSmallSpriteConfig(160 + 16 * 4, 100 + 16 * 2, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        36 + 10,
+        generateSmallSpriteConfig(160 + 16 * 4, 100 + 16 * 1, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        36 + 11,
+        generateSmallSpriteConfig(160 + 16 * 4, 100 + 16 * 0, 2, 2, 2));
+    // I
+    drawRectangleWithSmallSprite(47 + 1,
+                                 generateSmallSpriteConfig(256, 100, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        47 + 2, generateSmallSpriteConfig(256, 100 + 16, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        47 + 3, generateSmallSpriteConfig(256, 100 + 16 * 2, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        47 + 4, generateSmallSpriteConfig(256, 100 + 16 * 3, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        47 + 5, generateSmallSpriteConfig(256, 100 + 16 * 4, 2, 2, 2));
+    // N
+    drawRectangleWithSmallSprite(
+        52 + 1, generateSmallSpriteConfig(288 + 16 * 0, 100, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        52 + 2, generateSmallSpriteConfig(288 + 16 * 0, 100 + 16, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        52 + 3, generateSmallSpriteConfig(288 + 16 * 0, 100 + 16 * 2, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        52 + 4, generateSmallSpriteConfig(288 + 16 * 0, 100 + 16 * 3, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        52 + 5, generateSmallSpriteConfig(288 + 16 * 0, 100 + 16 * 4, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        52 + 6, generateSmallSpriteConfig(288 + 16 * 1, 100 + 16, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        52 + 7, generateSmallSpriteConfig(288 + 16 * 2, 100 + 16 * 2, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        52 + 8, generateSmallSpriteConfig(288 + 16 * 3, 100, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        52 + 9, generateSmallSpriteConfig(288 + 16 * 3, 100 + 16, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        52 + 10,
+        generateSmallSpriteConfig(288 + 16 * 3, 100 + 16 * 2, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        52 + 11,
+        generateSmallSpriteConfig(288 + 16 * 3, 100 + 16 * 3, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        52 + 12,
+        generateSmallSpriteConfig(288 + 16 * 3, 100 + 16 * 4, 2, 2, 2));
+    // printText("YOU WIN!!!");
+  }
+  if (status == LOSE) {
+    // L
+    drawRectangleWithSmallSprite(
+        64 + 1, generateSmallSpriteConfig(100 + 16 * 0, 100 + 16 * 0, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        64 + 2, generateSmallSpriteConfig(100 + 16 * 0, 100 + 16 * 1, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        64 + 3, generateSmallSpriteConfig(100 + 16 * 0, 100 + 16 * 2, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        64 + 4, generateSmallSpriteConfig(100 + 16 * 0, 100 + 16 * 3, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        64 + 5, generateSmallSpriteConfig(100 + 16 * 1, 100 + 16 * 4, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        64 + 6, generateSmallSpriteConfig(100 + 16 * 2, 100 + 16 * 4, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        64 + 7, generateSmallSpriteConfig(100 + 16 * 0, 100 + 16 * 4, 2, 2, 2));
+    // O
+    drawRectangleWithSmallSprite(
+        73 + 1, generateSmallSpriteConfig(100 + 16 * 4, 100 + 16 * 1, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        73 + 2, generateSmallSpriteConfig(100 + 16 * 4, 100 + 16 * 2, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        73 + 3, generateSmallSpriteConfig(100 + 16 * 4, 100 + 16 * 3, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        73 + 4, generateSmallSpriteConfig(100 + 16 * 7, 100 + 16 * 1, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        73 + 5, generateSmallSpriteConfig(100 + 16 * 7, 100 + 16 * 2, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        73 + 6, generateSmallSpriteConfig(100 + 16 * 7, 100 + 16 * 3, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        73 + 7, generateSmallSpriteConfig(100 + 16 * 5, 100 + 16 * 0, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        73 + 8, generateSmallSpriteConfig(100 + 16 * 6, 100 + 16 * 0, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        73 + 9, generateSmallSpriteConfig(100 + 16 * 5, 100 + 16 * 4, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        73 + 10,
+        generateSmallSpriteConfig(100 + 16 * 6, 100 + 16 * 4, 2, 2, 2));
+    // S
+    drawRectangleWithSmallSprite(
+        83 + 1, generateSmallSpriteConfig(180 + 16 * 4, 100 + 16 * 4, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        83 + 2, generateSmallSpriteConfig(180 + 16 * 5, 100 + 16 * 4, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        83 + 3, generateSmallSpriteConfig(180 + 16 * 6, 100 + 16 * 4, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        83 + 4, generateSmallSpriteConfig(180 + 16 * 7, 100 + 16 * 3, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        83 + 5, generateSmallSpriteConfig(180 + 16 * 6, 100 + 16 * 2, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        83 + 6, generateSmallSpriteConfig(180 + 16 * 5, 100 + 16 * 2, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        83 + 7, generateSmallSpriteConfig(180 + 16 * 4, 100 + 16 * 1, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        83 + 8, generateSmallSpriteConfig(180 + 16 * 5, 100 + 16 * 0, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        83 + 9, generateSmallSpriteConfig(180 + 16 * 6, 100 + 16 * 0, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        83 + 10,
+        generateSmallSpriteConfig(180 + 16 * 7, 100 + 16 * 0, 2, 2, 2));
+    // E
+    drawRectangleWithSmallSprite(
+        93 + 1, generateSmallSpriteConfig(180 + 16 * 9, 100 + 16 * 0, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        93 + 2,
+        generateSmallSpriteConfig(180 + 16 * 10, 100 + 16 * 0, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        93 + 3,
+        generateSmallSpriteConfig(180 + 16 * 11, 100 + 16 * 0, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        93 + 4,
+        generateSmallSpriteConfig(180 + 16 * 12, 100 + 16 * 0, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        93 + 5, generateSmallSpriteConfig(180 + 16 * 9, 100 + 16 * 1, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        93 + 6, generateSmallSpriteConfig(180 + 16 * 9, 100 + 16 * 2, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        93 + 7, generateSmallSpriteConfig(180 + 16 * 9, 100 + 16 * 3, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        93 + 8, generateSmallSpriteConfig(180 + 16 * 9, 100 + 16 * 4, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        93 + 9,
+        generateSmallSpriteConfig(180 + 16 * 10, 100 + 16 * 2, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        93 + 10,
+        generateSmallSpriteConfig(180 + 16 * 11, 100 + 16 * 2, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        93 + 11,
+        generateSmallSpriteConfig(180 + 16 * 10, 100 + 16 * 4, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        93 + 12,
+        generateSmallSpriteConfig(180 + 16 * 11, 100 + 16 * 4, 2, 2, 2));
+    drawRectangleWithSmallSprite(
+        93 + 13,
+        generateSmallSpriteConfig(180 + 16 * 12, 100 + 16 * 4, 2, 2, 2));
+    // printText("GAME OVER");
+  }
   while (1) {
-    if (status == WIN) {
-      printText("YOU WIN!!!");
-    }
-    if (status == LOSE) {
-      printText("GAME OVER");
-    }
   }
 }
