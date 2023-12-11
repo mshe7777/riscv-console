@@ -42,8 +42,7 @@ TStatus mutexRelease(scheduler* schedule,Mutex* m){
             resume(schedule,m->owner);
         }
     }else{
-        // error?
-
+        // error
     }
 }
 

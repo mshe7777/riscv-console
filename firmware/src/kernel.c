@@ -27,16 +27,6 @@ TStatus OSinitialize(uint32_t *gp)
     condArray = malloc(sizeof(struct ConditionVariable *) * MAX_COND_NUM);
     global_sleep_timer = malloc(sizeof(struct SleepTimer *));
     initSleepTimer(global_sleep_timer);
-    // init main
-    // struct TCB* main_thread=malloc(sizeof(struct TCB));
-    // main_thread->tid=global_tid;
-    // main_thread->state=RUNNING;
-    // main_thread->priority=Normal;
-    // threadArray[global_tid]=main_thread;
-    // set_tp(main_thread->tid);
-    // sched->current_tid=main_thread->tid;
-    // global_tid++;
-    // current_thread_num++;
     global_gp = gp;
     init_flag = 1;
     // running_thread_id=sched->current_tid;
@@ -83,7 +73,6 @@ ThreadID threadCreate(TContextEntry entry, void *param, uint32_t memsize, Thread
                     (TStackRef)(ThreadStack[global_tid] + memsize),
                     (TContextEntry)entry, (void *)param, (uint32_t)gp);
             threadArray[global_tid] = new_thread;
-            // new_thread->sp=ThreadPointers[global_tid];
             current_thread_num++;
             global_tid++;
             enqueue(sched->ready, new_thread->tid);
@@ -131,8 +120,6 @@ TStatus threadTerminate(ThreadID tid, ThreadReturn retval)
     curr_thread->ret_val = retval;
     if (sched->current_tid == tid)
     {
-        // schedule(sched);
-        // interruptSwicth(sched);
         kexit(sched);
     }
     threadDelete(tid);
@@ -196,15 +183,8 @@ void handle_time_interrupt()
     {
         int current_num = sched->ready->size;
         uint32_t mepc = csr_mepc_read();
-        // printf("\n");
         TInterruptState PrevState = SuspendInterrupts();
-        // int t1, t2;
-        // t1 = running_thread_pointer;
-        // t2 = (running_thread_pointer + 1) % current_thread_num;
-        // running_thread_pointer = t2;
-        // ContextSwitch(&ThreadPointers[t1], ThreadPointers[t2]);
-        // schedule(sched);
-
+      
         interruptSwicth(sched);
 
         csr_write_mepc(mepc);

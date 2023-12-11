@@ -98,16 +98,6 @@ void thread_join(ThreadID tid);
 
 
 
-
-
-
-
-
-
-
-
-
-
 __attribute__((always_inline)) inline TInterruptState SuspendInterrupts(void)
 {
     uint32_t result;
@@ -132,8 +122,6 @@ __attribute__((always_inline)) inline void DisableInterrupts(void)
 {
     asm volatile("csrci mstatus, 0x8");
 }
-
-
 
 
 #endif

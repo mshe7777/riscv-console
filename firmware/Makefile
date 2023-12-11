@@ -39,7 +39,6 @@ TARGET_OBJS =   $(OBJ_DIR)/main.o               \
                 $(OBJ_DIR)/startup.o  			\
 				$(OBJ_DIR)/syscall.o			\
 				$(OBJ_DIR)/kernel.o				\
-				$(OBJ_DIR)/video.o				\
 				$(OBJ_DIR)/memory.o				\
 				$(OBJ_DIR)/thread.o				\
 				$(OBJ_DIR)/mutex.o				\

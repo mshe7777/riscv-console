@@ -18,8 +18,6 @@ extern struct SleepTimer* global_sleep_timer;
 
 
 
-
-
 void doSleep(size_t cnt,scheduler* schedule,SleepTimer* sleeper);
 
 void updateGlobalTicks(scheduler* schedule,SleepTimer* sleeper);

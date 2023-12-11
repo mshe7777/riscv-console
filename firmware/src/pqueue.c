@@ -19,7 +19,6 @@ void freePriorityQueue(struct PriorityQueue *pq) {
 
 void insert(struct PriorityQueue *pq, struct Process process) {
     if (pq->size == pq->capacity) {
-        // printf("Priority queue is full. Cannot insert.\n");
         return;
     }
 
@@ -37,7 +36,6 @@ void insert(struct PriorityQueue *pq, struct Process process) {
 
 struct Process extractMin(struct PriorityQueue *pq) {
     if (pq->size == 0) {
-        // printf("Priority queue is empty. Returning invalid process.\n");
         return (struct Process){-1, -1};
     }
 

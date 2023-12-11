@@ -7,7 +7,6 @@ void createQueue(Queue* q,int capacity) {
     q->capacity = capacity;
     q->front = q->rear = -1;
     q->size = 0;
-    // return q;
 }
 
 int isEmpty(Queue *q) {
@@ -36,7 +35,6 @@ void enqueue(Queue *q, int value) {
 
 int dequeue(Queue *q) {
     if (isEmpty(q)) {
-        // printf("Queue is empty. Cannot dequeue.\n");
         return -1;
     }
 

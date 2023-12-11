@@ -7,8 +7,6 @@ first_flag=1;
 
 TStatus initScheduler(scheduler* sch){
 
-
-
     // 初始化其他成员
     sch->current_tid = 0;      
     sch->next_tid = 0;
@@ -28,8 +26,6 @@ TStatus initScheduler(scheduler* sch){
 };
 
 void interruptSwicth(scheduler* schedule){
-    // switchThreadStateTo(schedule,READY);
-    // ?
 
     // first time current=0
     if(isEmpty(schedule->ready)) return;
@@ -45,9 +41,7 @@ void interruptSwicth(scheduler* schedule){
     first_flag=0;
     
     schedule->current_tid=next_tid;
-    // if(curr_tid!=next_tid){
-        ContextSwitch(&threadArray[curr_tid]->sp,threadArray[next_tid]->sp);
-    // }
+    ContextSwitch(&threadArray[curr_tid]->sp,threadArray[next_tid]->sp);
 }
 
 void yield(scheduler* schedule){
@@ -62,13 +56,10 @@ void resume(scheduler* schedule, ThreadID tid){
     
     threadArray[tid]->state=READY;
     enqueue(schedule->ready,tid);
-    // interruptSwicth(schedule);
 }
 void kexit(scheduler* schedule){
     switchThreadStateTo(schedule,FINISHED);
 }
-
-
 
 
 void startFirstThread(scheduler* schedule){

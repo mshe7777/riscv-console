@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include "include/kernel.h"
-#include "include/video.h"
 #include "include/thread.h"
 #include "include/memory.h"
 #include "include/scheduler.h"
