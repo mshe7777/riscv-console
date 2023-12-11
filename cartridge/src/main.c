@@ -235,9 +235,9 @@ void frogMoveThread(void *param) {
   struct position *frog = (struct position *)param;
   int counter2 = 0;
   int last_counter2 = 0;
+  int gap = 1;
   while (status == RUN) {
     counter2 = getTicks();
-    int gap = 1;
     if (counter2 - last_counter2 >= gap) { // set frequency here
       gap = 1;
       controller_status = getButtonStatus();
@@ -249,12 +249,11 @@ void frogMoveThread(void *param) {
         }
 
         if (controller_status & 0x2) {
-
           lock(frog->mtx);
           frog->y -= 64;
           frog->step++;
           unlock(frog->mtx);
-          gap = 30;
+          gap = 5;
         }
 
         if (controller_status & 0x4) {
@@ -264,7 +263,7 @@ void frogMoveThread(void *param) {
           frog->y += 64;
           frog->step--;
           unlock(frog->mtx);
-          gap = 30;
+          gap = 5;
         }
 
         if (controller_status & 0x8) {
