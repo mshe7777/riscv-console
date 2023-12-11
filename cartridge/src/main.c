@@ -131,7 +131,7 @@ void initVideoSetting() {
 }
 
 void showGameOver() {
-  
+
   if (status == WIN) {
     // display YOU WIN
     setSpriteControl(0, 0, 64 + 12, 128, 3, 1, Large);
@@ -167,24 +167,31 @@ void woodMoveThread(void *param) {
 
   while (status == RUN) {
     counter = getTicks();
-    if (counter - last_counter >= 1) {  //set frequency here
+    if (counter - last_counter >= 1) { // set frequency here
+
+      // position reset over screen
+      if (woods[0].x - 32 - 5 <= 0)
+        woods[0].dir = 1;
+
+      if (woods[0].x + 64 >= 512)
+        woods[0].dir = -1;
+
+      if (woods[1].x - 32 - 7 <= 0)
+        woods[1].dir = 1;
+
+      if (woods[1].x + 64 >= 512)
+        woods[1].dir = -1;
+
+      if (woods[2].x - 32 - 10 <= 0)
+        woods[2].dir = 1;
+
+      if (woods[2].x + 64 >= 512)
+        woods[2].dir = -1;
+
       // wood move speed
       woods[0].x += woods[0].dir * 5;
       woods[1].x += woods[1].dir * 7;
       woods[2].x += woods[2].dir * 10;
-
-      // position reset over screen
-      if (woods[0].x - 32 <= 0) woods[0].dir = 1;
-
-      if (woods[0].x + 64 >= 512) woods[0].dir = -1;
-
-      if (woods[1].x - 32 <= 0) woods[1].dir = 1;
-
-      if (woods[1].x + 64 >= 512) woods[1].dir = -1;
-
-      if (woods[2].x - 32 <= 0) woods[2].dir = 1;
-
-      if (woods[2].x + 64 >= 512) woods[2].dir = -1;
 
       // moving
       setSpriteControl(2, 2, woods[0].x - 32, wood1_y, 1, 1, Medium);
@@ -203,14 +210,17 @@ void woodMoveThread(void *param) {
       if (frog->step == 3) {
         lock(frog->mtx);
         frog->x += woods[2].dir * 10;
+        frog->x = frog->x < 0 ? 0 : frog->x;
         unlock(frog->mtx);
       } else if (frog->step == 2) {
         lock(frog->mtx);
         frog->x += woods[1].dir * 7;
+        frog->x = frog->x < 7 ? 7 : frog->x;
         unlock(frog->mtx);
       } else if (frog->step == 1) {
         lock(frog->mtx);
         frog->x += woods[0].dir * 5;
+        frog->x = frog->x < 0 ? 0 : frog->x;
         unlock(frog->mtx);
       }
       setSpriteControl(1, 1, frog->x, frog->y, 2, 1, Medium);
@@ -224,9 +234,11 @@ void frogMoveThread(void *param) {
   struct position *frog = (struct position *)param;
   int counter2 = 0;
   int last_counter2 = 0;
+  int gap = 1;
   while (status == RUN) {
     counter2 = getTicks();
-    if (counter2 - last_counter2 >= 1) {  //set frequency here
+    if (counter2 - last_counter2 >= gap) { // set frequency here
+      gap = 1;
       controller_status = getButtonStatus();
       if (controller_status) {
         if (controller_status & 0x1) {
@@ -236,19 +248,21 @@ void frogMoveThread(void *param) {
         }
 
         if (controller_status & 0x2) {
-          if (counter2 - last_counter2 < 5) continue;
           lock(frog->mtx);
           frog->y -= 64;
           frog->step++;
           unlock(frog->mtx);
+          gap = 5;
         }
 
         if (controller_status & 0x4) {
-          if (frog->step == 0 || counter2 - last_counter2 < 5) continue;
+          if (frog->step == 0)
+            continue;
           lock(frog->mtx);
           frog->y += 64;
           frog->step--;
           unlock(frog->mtx);
+          gap = 5;
         }
 
         if (controller_status & 0x8) {
@@ -284,7 +298,6 @@ void checkGameOverThread(void *param) {
       if (abs(frog->x - woods[0].x) >= 64)
         status = LOSE;
     }
-
   }
   showGameOver();
 }
