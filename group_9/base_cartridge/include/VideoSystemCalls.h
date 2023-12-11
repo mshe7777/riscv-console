@@ -47,5 +47,4 @@ uint32_t initSprite(Sprite *spirite);
 uint32_t removeSprite(Sprite *spirite);
 uint32_t backgroundInit(Background *background);
 
-
 #endif

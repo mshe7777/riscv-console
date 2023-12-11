@@ -32,216 +32,319 @@ uint8_t last_move = 0;
 int wood1_dir = -1;
 int wood2_dir = 1;
 int wood3_dir = -1;
-//Sprite *frog;
-//Sprite *wood_left_1;
-//Sprite *wood_mid_1;
-//Sprite *wood_right_1;
-//Sprite *wood_left_2;
-//Sprite *wood_mid_2;
-//Sprite *wood_right_2;
-//Sprite *wood_left_3;
-//Sprite *wood_mid_3;
-//Sprite *wood_right_3;
-//Sprite *sprites[10];
+uint32_t light_green = 0xFF0EB037;
+uint32_t wood_brown = 0xFF994C1C;
+uint32_t river_blue = 0xFF0A1F94;
+
 
 int main() {
   // set mode to video
   setModeRegister(1);
 
+  // init background data
+  Background back;
+  uint32_t *background = (uint32_t *)malloc(sizeof(Background));
+  background = &back;
+  back.mode = 0;
+  back.color = river_blue;
+  back.typeMode = 0;
+  back.position.x = 0;
+  back.position.y = 0;
+  back.position.z = 0;
+  back.index = 0;
+  backgroundInit(background);
+
   // init frog data
-  Sprite *frog;
-  frog->type = MEDUIM;
-  frog->position.x = 240;
-  frog->position.y = 256;
-  frog->position.z = 3;
-  frog->index = 1;
-  frog->color = 0xFF0EB037;
-  initSprite(frog);
+  SpriteObj frog1;
+  frog1.spriteInt = (uint32_t *)malloc(sizeof(Sprite));
+  frog1.spriteInt = &frog1.sprite;
+  frog1.sprite.type = SMALL;
+  frog1.sprite.position.x = 240;
+  frog1.sprite.position.y = 256;
+  frog1.sprite.position.z = 3;
+  frog1.sprite.index = 1;
+  frog1.sprite.color = light_green;
+  initSprite(frog1.spriteInt);
+
+  SpriteObj frog2;
+  frog2.spriteInt = (uint32_t *)malloc(sizeof(Sprite));
+  frog2.spriteInt = &frog2.sprite;
+  frog2.sprite.type = SMALL;
+  frog2.sprite.position.x = 256;
+  frog2.sprite.position.y = 272;
+  frog2.sprite.position.z = 3;
+  frog2.sprite.index = 2;
+  frog2.sprite.color = light_green;
+  initSprite(frog2.spriteInt);
+
+  SpriteObj frog3;
+  frog3.spriteInt = (uint32_t *)malloc(sizeof(Sprite));
+  frog3.spriteInt = &frog3.sprite;
+  frog3.sprite.type = SMALL;
+  frog3.sprite.position.x = 256;
+  frog3.sprite.position.y = 256;
+  frog3.sprite.position.z = 3;
+  frog3.sprite.index = 3;
+  frog3.sprite.color = light_green;
+  initSprite(frog3.spriteInt);
+
+  SpriteObj frog4;
+  frog4.spriteInt = (uint32_t *)malloc(sizeof(Sprite));
+  frog4.spriteInt = &frog4.sprite;
+  frog4.sprite.type = SMALL;
+  frog4.sprite.position.x = 240;
+  frog4.sprite.position.y = 272;
+  frog4.sprite.position.z = 3;
+  frog4.sprite.index = 4;
+  frog4.sprite.color = light_green;
+  initSprite(frog4.spriteInt);
 
   // init wood data
   // wood 1
-  Sprite *wood_left_1;
-  wood_left_1->type = MEDUIM;
-  wood_left_1->position.x = 208;
-  wood_left_1->position.y = 192;
-  wood_left_1->position.z = 2;
-  wood_left_1->index = 2;
-  wood_left_1->color = 0xFF994C1C;
-  initSprite(wood_left_1);
+  SpriteObj wood_left_1;
+  wood_left_1.spriteInt = (uint32_t *)malloc(sizeof(Sprite));
+  wood_left_1.spriteInt = &wood_left_1.sprite;
+  wood_left_1.sprite.type = MEDUIM;
+  wood_left_1.sprite.position.x = 208;
+  wood_left_1.sprite.position.y = 207;
+  wood_left_1.sprite.position.z = 2;
+  wood_left_1.sprite.index = 2;
+  wood_left_1.sprite.color = wood_brown;
+  initSprite(wood_left_1.spriteInt);
 
-  Sprite *wood_mid_1;
-  wood_mid_1->type = MEDUIM;
-  wood_mid_1->position.x = 240;
-  wood_mid_1->position.y = 192;
-  wood_mid_1->position.z = 2;
-  wood_mid_1->index = 3;
-  wood_mid_1->color = 0xFF994C1C;
-  initSprite(wood_mid_1);
+  SpriteObj wood_mid_1;
+  wood_mid_1.spriteInt = (uint32_t *)malloc(sizeof(Sprite));
+  wood_mid_1.spriteInt = &wood_mid_1.sprite;
+  wood_mid_1.sprite.type = MEDUIM;
+  wood_mid_1.sprite.position.x = 240;
+  wood_mid_1.sprite.position.y = 207;
+  wood_mid_1.sprite.position.z = 2;
+  wood_mid_1.sprite.index = 3;
+  wood_mid_1.sprite.color = wood_brown;
+  initSprite(wood_mid_1.spriteInt);
 
-  Sprite *wood_right_1;
-  wood_right_1->type = MEDUIM;
-  wood_right_1->position.x = 272;
-  wood_right_1->position.y = 192;
-  wood_right_1->position.z = 2;
-  wood_right_1->index = 4;
-  wood_right_1->color = 0xFF994C1C;
-  initSprite(wood_right_1);
+  SpriteObj wood_right_1;
+  wood_right_1.spriteInt = (uint32_t *)malloc(sizeof(Sprite));
+  wood_right_1.spriteInt = &wood_right_1.sprite;
+  wood_right_1.sprite.type = MEDUIM;
+  wood_right_1.sprite.position.x = 272;
+  wood_right_1.sprite.position.y = 207;
+  wood_right_1.sprite.position.z = 2;
+  wood_right_1.sprite.index = 4;
+  wood_right_1.sprite.color = wood_brown;
+  initSprite(wood_right_1.spriteInt);
 
   // wood 2
-  Sprite *wood_left_2;
-  wood_left_2->type = MEDUIM;
-  wood_left_2->position.x = 208 + 80;
-  wood_left_2->position.y = 128;
-  wood_left_2->position.z = 2;
-  wood_left_2->index = 5;
-  wood_left_2->color = 0xFF994C1C;
-  initSprite(wood_left_2);
+  SpriteObj wood_left_2;
+  wood_left_2.spriteInt = (uint32_t *)malloc(sizeof(Sprite));
+  wood_left_2.spriteInt = &wood_left_2.sprite;
+  wood_left_2.sprite.type = MEDUIM;
+  wood_left_2.sprite.position.x = 208 + 80;
+  wood_left_2.sprite.position.y = 143;
+  wood_left_2.sprite.position.z = 2;
+  wood_left_2.sprite.index = 5;
+  wood_left_2.sprite.color = wood_brown;
+  initSprite(wood_left_2.spriteInt);
 
-  Sprite *wood_mid_2;
-  wood_mid_2->type = MEDUIM;
-  wood_mid_2->position.x = 240 + 80;
-  wood_mid_2->position.y = 128;
-  wood_mid_2->position.z = 2;
-  wood_mid_2->index = 6;
-  wood_mid_2->color = 0xFF994C1C;
-  initSprite(wood_mid_2);
+  SpriteObj wood_mid_2;
+  wood_mid_2.spriteInt = (uint32_t *)malloc(sizeof(Sprite));
+  wood_mid_2.spriteInt = &wood_mid_2.sprite;
+  wood_mid_2.sprite.type = MEDUIM;
+  wood_mid_2.sprite.position.x = 240 + 80;
+  wood_mid_2.sprite.position.y = 143;
+  wood_mid_2.sprite.position.z = 2;
+  wood_mid_2.sprite.index = 6;
+  wood_mid_2.sprite.color = wood_brown;
+  initSprite(wood_mid_2.spriteInt);
 
-  Sprite *wood_right_2;
-  wood_right_2->type = MEDUIM;
-  wood_right_2->position.x = 272 + 80;
-  wood_right_2->position.y = 128;
-  wood_right_2->position.z = 2;
-  wood_right_2->index = 7;
-  wood_right_2->color = 0xFF994C1C;
-  initSprite(wood_right_2);
+  SpriteObj wood_right_2;
+  wood_right_2.spriteInt = (uint32_t *)malloc(sizeof(Sprite));
+  wood_right_2.spriteInt = &wood_right_2.sprite;
+  wood_right_2.sprite.type = MEDUIM;
+  wood_right_2.sprite.position.x = 272 + 80;
+  wood_right_2.sprite.position.y = 143;
+  wood_right_2.sprite.position.z = 2;
+  wood_right_2.sprite.index = 7;
+  wood_right_2.sprite.color = wood_brown;
+  initSprite(wood_right_2.spriteInt);
 
   // wood 3
-  Sprite *wood_left_3;
-  wood_left_3->type = MEDUIM;
-  wood_left_3->position.x = 208 - 40;
-  wood_left_3->position.y = 64;
-  wood_left_3->position.z = 2;
-  wood_left_3->index = 8;
-  wood_left_3->color = 0xFF994C1C;
-  initSprite(wood_left_3);
+  SpriteObj wood_left_3;
+  wood_left_3.spriteInt = (uint32_t *)malloc(sizeof(Sprite));
+  wood_left_3.spriteInt = &wood_left_3.sprite;
+  wood_left_3.sprite.type = MEDUIM;
+  wood_left_3.sprite.position.x = 208 - 40;
+  wood_left_3.sprite.position.y = 79;
+  wood_left_3.sprite.position.z = 2;
+  wood_left_3.sprite.index = 8;
+  wood_left_3.sprite.color = wood_brown;
+  initSprite(wood_left_3.spriteInt);
 
-  Sprite *wood_mid_3;
-  wood_mid_3->type = MEDUIM;
-  wood_mid_3->position.x = 240 - 40;
-  wood_mid_3->position.y = 64;
-  wood_mid_3->position.z = 2;
-  wood_mid_3->index = 9;
-  wood_mid_3->color = 0xFF994C1C;
-  initSprite(wood_mid_3);
+  SpriteObj wood_mid_3;
+  wood_mid_3.spriteInt = (uint32_t *)malloc(sizeof(Sprite));
+  wood_mid_3.spriteInt = &wood_mid_3.sprite;
+  wood_mid_3.sprite.type = MEDUIM;
+  wood_mid_3.sprite.position.x = 240 - 40;
+  wood_mid_3.sprite.position.y = 79;
+  wood_mid_3.sprite.position.z = 2;
+  wood_mid_3.sprite.index = 9;
+  wood_mid_3.sprite.color = wood_brown;
+  initSprite(wood_mid_3.spriteInt);
 
-  Sprite *wood_right_3;
-  wood_right_3->type = MEDUIM;
-  wood_right_3->position.x = 272 - 40;
-  wood_right_3->position.y = 64;
-  wood_right_3->position.z = 2;
-  wood_right_3->index = 10;
-  wood_right_3->color = 0xFF994C1C;
-  initSprite(wood_right_3);
+  SpriteObj wood_right_3;
+  wood_right_3.spriteInt = (uint32_t *)malloc(sizeof(Sprite));
+  wood_right_3.spriteInt = &wood_right_3.sprite;
+  wood_right_3.sprite.type = MEDUIM;
+  wood_right_3.sprite.position.x = 272 - 40;
+  wood_right_3.sprite.position.y = 79;
+  wood_right_3.sprite.position.z = 2;
+  wood_right_3.sprite.index = 10;
+  wood_right_3.sprite.color = wood_brown;
+  initSprite(wood_right_3.spriteInt);
 
-  Sprite *sprites[9] = {wood_left_1, wood_mid_1, wood_right_1, wood_left_2, wood_mid_2, wood_right_2, wood_left_3, wood_mid_3, wood_right_3};
+  //Sprite *sprites[9] = {wood_left_1, wood_mid_1, wood_right_1, wood_left_2, wood_mid_2, wood_right_2, wood_left_3, wood_mid_3, wood_right_3};
   //moveSprites(sprites, 9);
 
-  // init background data
-  //Background *background;
-  //background->mode = 0;
-  //background->typeMode = 0;
-  //background->position.x = 100;
-  //background->position.y = 100;
-  //background->position.z = 0;
-  //background->color = 0xFF0A1F94;
-  //background->index = 0;
-  //backgroundInit(background);
-  
-  while(status != RUN) {
-
-  }
 
   while(status == RUN) {
     global = GetTicks();
-    if(global != last_global) {
+    if(global - last_global > 2) {
       // wood move
       // wood 1
-      wood_left_1->position.x += wood1_dir * 5;
-      wood_mid_1->position.x += wood1_dir * 5;
-      wood_right_1->position.x += wood1_dir * 5;
+      wood_left_1.sprite.position.x += wood1_dir * 5;
+      wood_mid_1.sprite.position.x += wood1_dir * 5;
+      wood_right_1.sprite.position.x += wood1_dir * 5;
 
       // wood 2
-      wood_left_2->position.x += wood2_dir * 7;
-      wood_mid_2->position.x += wood2_dir * 7;
-      wood_right_2->position.x += wood2_dir * 7;
+      wood_left_2.sprite.position.x += wood2_dir * 7;
+      wood_mid_2.sprite.position.x += wood2_dir * 7;
+      wood_right_2.sprite.position.x += wood2_dir * 7;
 
       // wood 3
-      wood_left_3->position.x += wood3_dir * 10;
-      wood_mid_3->position.x += wood3_dir * 10;
-      wood_right_3->position.x += wood3_dir * 10;
+      wood_left_3.sprite.position.x += wood3_dir * 10;
+      wood_mid_3.sprite.position.x += wood3_dir * 10;
+      wood_right_3.sprite.position.x += wood3_dir * 10;
 
       // wood position reset over screen
-      if (wood_left_1->position.x <= 0) wood1_dir = 1;
+      if (wood_left_1.sprite.position.x <= 0) wood1_dir = 1;
 
-      if (wood_right_1->position.x + 32 >= 512) wood1_dir = -1;
+      if (wood_right_1.sprite.position.x + 32 >= 512) wood1_dir = -1;
 
-      if (wood_left_2->position.x <= 0) wood2_dir = 1;
+      if (wood_left_2.sprite.position.x <= 0) wood2_dir = 1;
 
-      if (wood_right_2->position.x + 32 >= 512) wood2_dir = -1;
+      if (wood_right_2.sprite.position.x + 32 >= 512) wood2_dir = -1;
 
-      if (wood_left_3->position.x <= 0) wood3_dir = 1;
+      if (wood_left_3.sprite.position.x <= 0) wood3_dir = 1;
 
-      if (wood_right_3->position.x + 32 >= 512) wood3_dir = -1;
+      if (wood_right_3.sprite.position.x + 32 >= 512) wood3_dir = -1;
       
       // wood moving
       //moveSprites(sprites, 9);
-      moveSprite(wood_left_1); 
-      moveSprite(wood_mid_1); 
-      moveSprite(wood_right_1);
-      moveSprite(wood_left_2); 
-      moveSprite(wood_mid_2); 
-      moveSprite(wood_right_2);
-      moveSprite(wood_left_3); 
-      moveSprite(wood_mid_3); 
-      moveSprite(wood_right_3);
+      moveSprite(wood_left_1.spriteInt); 
+      moveSprite(wood_mid_1.spriteInt); 
+      moveSprite(wood_right_1.spriteInt);
+      moveSprite(wood_left_2.spriteInt); 
+      moveSprite(wood_mid_2.spriteInt); 
+      moveSprite(wood_right_2.spriteInt);
+      moveSprite(wood_left_3.spriteInt); 
+      moveSprite(wood_mid_3.spriteInt); 
+      moveSprite(wood_right_3.spriteInt);
 
       // frog on the wood
       if (step == 3) {
-        frog->position.x += wood3_dir * 10;
+        frog1.sprite.position.x += wood3_dir * 10;
+        frog2.sprite.position.x += wood3_dir * 10;
+        frog3.sprite.position.x += wood3_dir * 10;
+        frog4.sprite.position.x += wood3_dir * 10;
       } else if (step == 2) {
-        frog->position.x += wood2_dir * 7;
+        frog1.sprite.position.x += wood2_dir * 7;
+        frog2.sprite.position.x += wood2_dir * 7;
+        frog3.sprite.position.x += wood2_dir * 7;
+        frog4.sprite.position.x += wood2_dir * 7;
       } else if (step== 1) {
-        frog->position.x += wood1_dir * 5;
+        frog1.sprite.position.x += wood1_dir * 5;
+        frog2.sprite.position.x += wood1_dir * 5;
+        frog3.sprite.position.x += wood1_dir * 5;
+        frog4.sprite.position.x += wood1_dir * 5;
       }
 
       // frog move
       controller_status = GetController();
       if(controller_status) {
         if (controller_status & 0x1) {
-          frog->position.x -= 10;
+          frog1.sprite.position.x -= 10;
+          frog2.sprite.position.x -= 10;
+          frog3.sprite.position.x -= 10;
+          frog4.sprite.position.x -= 10;
         }
 
-        if (controller_status & 0x2 && global - last_move > 5) {
-          frog->position.y -= 64;
+        if (controller_status & 0x2 && global - last_move > 15) {
+          frog1.sprite.position.y -= 64;
+          frog2.sprite.position.y -= 64;
+          frog3.sprite.position.y -= 64;
+          frog4.sprite.position.y -= 64;
           step++;
           last_move = global;
         }
 
-        if (controller_status & 0x4 && (step == 0 || global - last_move > 5)) {
-          frog->position.y += 64;
+        if (controller_status & 0x4 && global - last_move > 15) {
+          if (step == 0) continue;
+          frog1.sprite.position.y += 64;
+          frog2.sprite.position.y += 64;
+          frog3.sprite.position.y += 64;
+          frog4.sprite.position.y += 64;
           step--;
           last_move = global;
         }
 
         if (controller_status & 0x8) {
-          frog->position.x += 10;
+          frog1.sprite.position.x += 10;
+          frog2.sprite.position.x += 10;
+          frog3.sprite.position.x += 10;
+          frog4.sprite.position.x += 10;
         }
       }
       //moveSprites(sprites, 10);
-      moveSprite(frog);
+      moveSprite(frog1.spriteInt);
+      moveSprite(frog2.spriteInt);
+      moveSprite(frog3.spriteInt);
+      moveSprite(frog4.spriteInt);
+
+      // check win or lose
+      if (step == 4) status = WIN;
+
+      if (step == 3) {
+        if (abs(frog1.sprite.position.x - wood_mid_3.sprite.position.x) >= 64)
+          status = LOSE;
+      }
+
+      if (step == 2) {
+        if (abs(frog1.sprite.position.x - wood_mid_2.sprite.position.x) >= 64)
+          status = LOSE;
+      }
+
+      if (step == 1) {
+        if (abs(frog1.sprite.position.x - wood_mid_1.sprite.position.x) >= 64)
+          status = LOSE;
+      }
+
       last_global = global;
     }
   }
+
+  if(status == LOSE) {
+    setModeRegister(0);
+    char lose[4] = {'L', 'O', 'S', 'E'};
+    print(lose);
+  }
+
+  if(status == WIN) {
+    setModeRegister(0);
+    char lose[3] = {'W', 'I', 'N'};
+    print(lose);
+  }
+
+  while(1){};
 
   return 0;
 }
