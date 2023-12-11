@@ -54,6 +54,8 @@ int main() {
   int wood2_dir = 1;
   int wood3_dir = -1;
 
+  int gap = 10000;
+
   while (status == RUN) {
 
     ////Wood move thread
@@ -115,7 +117,6 @@ int main() {
     }
 
     // Frog move thread
-    int gap = 10000;
     if (countdown > gap) {
       gap = 10000;
       controller_status = getStatus();
@@ -127,7 +128,7 @@ int main() {
         if (controller_status & 0x2) {
           frog.y -= 64;
           frog.step++;
-          gap = 120000;
+          gap = 60000;
         }
 
         if (controller_status & 0x4) {
@@ -135,7 +136,7 @@ int main() {
             continue;
           frog.y += 64;
           frog.step--;
-          gap = 120000;
+          gap = 60000;
         }
 
         if (controller_status & 0x8) {
