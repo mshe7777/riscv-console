@@ -1,5 +1,5 @@
 # export DISPLAY=:1
-cd /code/group_6/baseline_cartridge
+cd /code/group_6/cartridge
 make clean && make
 
 if [ "$1" -eq 1 ]; then
